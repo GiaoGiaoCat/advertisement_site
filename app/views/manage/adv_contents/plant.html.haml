@@ -1,0 +1,24 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        广告推广
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告管理
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon12 i-pencil' ) + '日安装控量管理'
+    -unless @adv_content.adv_detail.nil?
+      = link_to "编辑账单信息", edit_manage_adv_content_adv_detail_path(@adv_content, @adv_content.adv_detail), class: 'btn btn-primary'
+    -else
+      = link_to "创建账单信息", new_manage_adv_content_adv_detail_path(@adv_content), class: 'btn btn-primary'
+.container
+  = simple_form_for [:manage, @adv_content] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :plan_view_count, label: '日安装控量管理'
+    .form-actions
+      = f.submit "保存", class: 'btn btn-primary'
+      = link_to '取消', manage_adv_contents_path, class: 'btn'
+

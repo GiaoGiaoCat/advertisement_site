@@ -1,0 +1,16 @@
+.container
+  = simple_form_for([:manage,@adv_content,@adv_advertiser_report]) do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :count, label: "数量", required: true
+      .control-group.datetime.optional.rule_activate_at
+        %label.datetime.optional.control-label
+          时间
+        .controls.controls-row
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = f.text_field :report_date, size: 16, required: true
+            %span.add-on
+              %i.icon16.i-calendar-4
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'
+      = link_to '取消', manage_adv_content_adv_advertiser_reports_path, class: 'btn'

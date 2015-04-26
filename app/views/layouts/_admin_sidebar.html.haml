@@ -1,0 +1,23 @@
+- if current_user.role?(:admin) || current_user.role?(:channel_manager)
+
+  %li{class: nav_class_with_urls([manage_adv_contents_path, list_manage_applications_path], true)}
+    = side_nav_without_li("广告推广", 'i-tree-5', '#')
+    %ul.sub
+      / = side_nav_with_li("广告推广策略", 'i-target-2', manage_charts_channel_data_path)
+      / = side_nav_with_li("广告物料管理", 'i-puzzle', manage_charts_channel_data_path)
+      / = side_nav_with_li("渠道策略配置", 'i-cube-3', manage_charts_channel_data_path)
+      -if current_user.role?(:admin)
+        %li
+          = side_nav_with_li("广告管理", 'icon20 i-notification', manage_adv_contents_path)
+      -else
+        = side_nav_with_li("广告管理", 'i-stats-3', manage_adv_contents_path(state: 'on'))
+      / -notify = AdvContentAccountNotify.all.count
+      / -if notify > 0
+      /   = side_nav_with_li("账单管理", 'i-stats-2', manage_account_bills_path, notify)
+      / -else
+      /   = side_nav_with_li("账单管理", 'i-stats-2', manage_account_bills_path)
+      - if current_user.role?(:admin)
+        = side_nav_with_li("自有应用管理", 'i-stats-2', manage_applications_path)
+        = side_nav_with_li("平台管理", 'i-stats-2', manage_platforms_path)
+        / = side_nav_with_li(" 提醒管理", 'i-stats-2', manage_adv_content_account_notifies_path)
+        / = side_nav_with_li(" 创建提醒", 'i-stats-2', generate_notify_manage_adv_contents_path)

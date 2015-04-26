@@ -1,0 +1,14 @@
+#forgot
+  .page-header
+    %h3.center 找回密码
+  = form_for(resource, :as => resource_name, :url => password_path(resource_name), html: { method: :post, class: 'form-horizontal' }) do |f|
+    .row-fluid
+      = show_flash_messages
+      .control-group
+        .controls-row
+          .icon
+            %i.icon20.i-envelop-2
+          = f.email_field :email, placeholder: 'Email', class: 'span12', :autofocus => true, :required => true
+
+      .form-actions.full
+        = submit_tag "发送新密码到我的邮箱中", class: 'btn btn-large btn-block btn-danger'

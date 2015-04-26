@@ -1,0 +1,38 @@
+/* logo */
+#header .brand { padding: 0; padding-top: 5px; }
+
+/* dashboard */
+.wizard-steps .wstep .title {}
+.wizard-steps .wstep .txt { font-weight: normal; display: block; color: #686866; }
+
+#header .nav > li > .coin_box {
+  color: #F4F4F4;
+  float: left;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding: 13px 20px 12px 10px;
+}
+#header .nav > li > .coin_box > span { padding: 5px; margin-left: 5px; }
+
+.popover { max-width: 296px; }
+.button_wrap { float: right; }
+th.text_right { text-align: right; }
+table .right { text-align: right; }
+div.selector * option { padding: 4px 6px; }
+
+#mainnav .nav-list > li.current > .sub li.current:first-child,
+#mainnav .nav-list > li.current > .sub li.current { border-top: none; border-bottom: none; }
+div.dataTables_info { padding-top: 0; line-height: 45px; }
+.form-horizontal input + .help-block, .form-horizontal select + .help-block, .form-horizontal textarea + .help-block, .form-horizontal .uneditable-input + .help-block, .form-horizontal .input-prepend + .help-block, .form-horizontal .input-append + .help-block { margin-top: 0; }
+
+
+/* ------------------ Custom Page  --------------------*/
+/* ------------------ Edit Ratio Settings section --------------------*/
+.ratio-settings #editRatio {
+  margin-top: 10px;
+}
+  .ratio-settings #editRatio .form-horizontal, .support-search .form-horizontal{margin-bottom: 0;}
+  .ratio-settings #editRatio .control-group {margin-bottom: 0px; width: 100%;float: left; border-bottom: none;}
+  .ratio-settings #editRatio .controls-row {margin-bottom: 0;}
+  .ratio-settings #editRatio textarea {margin-bottom: 0; height: 650px;}
+  .ratio-settings #editRatio .form-actions {background: white;float: left; width: 100%; margin-top: -1px;margin-bottom: 0;padding: 10px; border: 1px solid #c9c9c9;}

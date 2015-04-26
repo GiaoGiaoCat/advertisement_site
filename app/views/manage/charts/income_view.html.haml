@@ -1,0 +1,61 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        财务相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 收入明细
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-bars') + ' 收入明细'
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 收入明细
+      .widget-content
+        .controls.controls-row
+          = form_tag(manage_charts_income_view_path, class: 'form-horizontal', method: :get)
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = text_field_tag "begin", params[:begin], size: 16
+            %span.add-on
+              %i.icon16.i-calendar-4
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = text_field_tag "end", params[:end], size: 16
+            %span.add-on
+              %i.icon16.i-calendar-4
+          .inline_submit
+            = submit_tag "查询", class: 'btn btn-primary'
+        - if @orders_array
+          %table.table.table-striped.table-bordered
+            %thead
+              %tr
+                %th 日期
+                %th 成交订单
+                %th 收入（¥）
+            %tbody
+              - @orders_array.each do |row|
+                %tr
+                  %td.center= row[:day]
+                  %td.center= row[:count]
+                  %td.center
+                    %span.badge.badge-success= number_to_currency(row[:total], unit: "", separator: ".") + " 元"
+            %tfoot
+              %tr
+                %td.center 本页合计
+                %td.center= @orders_array.sum { |r| r[:count] }
+                %td.center
+                  %span.badge.badge-success= number_to_currency(@orders_array.sum { |r| r[:total] }, unit: "", separator: ".") + " 元"
+
+          .row-fluid
+            .span4
+              #dataTable_info.dataTables_info
+                = page_entries_info @orders_array
+            .span8
+              .dataTables_paginate.paging_bootstrap.pagination
+                = paginate @orders_array

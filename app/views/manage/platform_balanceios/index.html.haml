@@ -1,0 +1,70 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        平台管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active
+        =@platform.name
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-users-2') + "#{@platform_account.account_name}/花费列表"
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(manage_platform_platform_account_platform_balanceios_path(@platform, @platform_account), method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+- balance_total = 0;
+- adv_content_hash = Hash.new
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 广告名称
+      %th 金额
+      %th 时间
+      %th 操作
+  %tbody
+    - @platform_balanceios.each do |balance|
+      -unless balance.adv_content.nil?
+        - if adv_content_hash.has_key? (balance.adv_content.id)
+          -adv_content_hash[balance.adv_content.id]["balance"] += balance.money.to_i
+        -else
+          - adv_content_hash[balance.adv_content.id] = { "balance" =>  balance.money.to_i, "title" =>  balance.adv_content.title }
+        %tr
+          %td= balance.adv_content.tag
+          %td= balance.money
+          %td.center= balance.report_date.strftime('%Y-%m-%d')
+          %td.center.vcenter
+            .btn-group
+              = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 编辑', edit_manage_platform_platform_account_platform_balanceio_path(@platform, @platform_account, balance), class: 'btn btn-mini'
+              = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 删除', manage_platform_platform_account_platform_balanceio_path(@platform, @platform_account, balance), method: :delete, class: 'btn btn-mini'
+%br
+%p 总计
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 广告名称
+      %th 金额
+  %tbody
+    - adv_content_hash.each_value do |value|
+      %tr
+        %td= value["title"]
+        %td= value["balance"]
+=link_to "花费录入",new_manage_platform_platform_account_platform_balanceio_path(@platform, @platform_account), class: 'btn btn-primary'
+=link_to "返回",manage_platform_platform_accounts_path(@platform), class: 'btn btn-primary'

@@ -1,0 +1,34 @@
+#account_biil_infocModal.modal.hide.fade{tabindex: "-1", role: "dialog", "aria-labelledby" => "myModalLabel", "aria-hidden" => "true"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", "aria-hidden" => "true"}
+      x
+    %h3#myModalLabel
+      修改金币
+  .modal-body
+    = simple_form_for [:manage, @account_bill,  @account_bill_info] ,:html => { :class => "form-horizontal"} do |f|
+      = f.error_notification
+      .form-inputs
+        = f.association :account_bill, collection: AccountBill.all.map{|account_bill| [account_bill.id, account_bill.id]}, label: '账单id'
+        = f.association :adv_content, collection: AdvContent.all.map{|content| [content.tag, content.id]}, label: '广告'
+        .control-group.datetime.optional.rule_activate_at
+          %label.datetime.optional.control-label
+            开始时间
+          .controls.controls-row
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = f.text_field :start_date, size: 16, required: true
+              %span.add-on
+                %i.icon16.i-calendar-4
+        .control-group.datetime.optional.rule_activate_at
+          %label.datetime.optional.control-label
+            结束时间
+          .controls.controls-row
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = f.text_field :end_date, size: 16, required: true
+              %span.add-on
+                %i.icon16.i-calendar-4
+        = f.input :price, label: "金额"
+      .form-actions
+        = f.submit "提交", class: 'btn btn-primary'
+        = link_to '取消', :back, class: 'btn'
+  .modal-footer
+

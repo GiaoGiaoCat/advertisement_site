@@ -1,0 +1,60 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li.active 帮助和支持
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-question-3') + ' 帮助和支持'
+
+.row-fluid
+  .span12
+    .page-header
+      %h4 平台常见问题
+    .popular-question.row-fluid
+      .span6
+        %ul
+          %li
+            %span.icon16.i-file
+            = link_to "爱火移动广告平台是什么？", "#", class: 'faq_goto', "data-height" => 400
+          %li
+            %span.icon16.i-file
+            = link_to "加入“爱火”需要什么条件？", '#', class: 'faq_goto', "data-height" => 400
+          %li
+            %span.icon16.i-file
+            = link_to "如何成为广告主？", '#', class: 'faq_goto', "data-height" => 400
+      .span6
+        %ul
+          %li
+            %span.icon16.i-file
+            = link_to "如何成为“爱火”用户？", '#', class: 'faq_goto', "data-height" => 400
+          %li
+            %span.icon16.i-file
+            = link_to "忘记密码怎么办？", '#', class: 'faq_goto', "data-height" => 400
+          %li
+            %span.icon16.i-file
+            = link_to "常见无法登录的原因", '#', class: 'faq_goto', "data-height" => 400
+
+    .page-header
+      %h4 开发者常见问题
+    .popular-question.row-fluid
+      .span6
+        %ul
+          %li
+            %span.icon16.i-file
+            = link_to "怎样嵌入爱火联盟广告？", '#', class: 'faq_goto', "data-height" => 900
+          %li
+            %span.icon16.i-file
+            = link_to "怎样查看广告数据和佣金收入？", '#', class: 'faq_goto', "data-height" => 900
+      .span6
+        %ul
+          %li
+            %span.icon16.i-file
+            = link_to "佣金如何提现？", '#', class: 'faq_goto', "data-height" => 900
+          %li
+            %span.icon16.i-file
+            = link_to "爱火联盟如何保障真实性？会不会扣量？", '#', class: 'faq_goto', "data-height" => 900
+    .answer
+      = render "normal_questions"
+      = render "developer_questions"

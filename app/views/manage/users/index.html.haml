@@ -1,0 +1,51 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 平台用戶管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-users-2') + ' 平台用戶管理'
+.page-header
+  .row-fluid
+    .span8
+    .span4
+      = form_tag search_manage_users_path, :method => 'get', :class => "form-search right" do
+        %p
+          = text_field_tag :search, params[:search]
+          = submit_tag "搜索", :name => nil, :class => "btn"
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 用户邮箱
+      %th 开发者姓名
+      %th 应用
+      %th 渠道
+      %th 创建时间
+      %th
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.email
+        %td.center= user.profile.try(:name)
+        %td.center= user.applications.count
+        %td.center= user.channels.count
+        %td.center= user.created_at.strftime('%Y-%m-%d')
+        %td.center.vcenter
+          .btn-group
+            = link_to content_tag(:i, nil, class:'icon12 i-eye') + ' 查看', manage_user_path(user), class: 'btn btn-mini'
+            = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 编辑', edit_manage_user_path(user), class: 'btn btn-mini'
+
+.row-fluid
+  .span4
+    #dataTable_info.dataTables_info
+      = page_entries_info @users
+  .span8
+    .dataTables_paginate.paging_bootstrap.pagination
+      = paginate @users
+
+= link_to '添加用户', new_manage_user_path, class: 'btn btn-primary'

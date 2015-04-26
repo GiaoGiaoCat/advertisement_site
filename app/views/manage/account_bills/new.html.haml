@@ -1,0 +1,39 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        应用相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 创建应用
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-rocket') + ' 创建应用'
+
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th ID
+      %th 开始时间
+      %th 结束时间
+      %th 单价
+      %th 数量
+      %th 总金额
+      %th 操作
+  %tbody
+    -@account_bill.account_bill_infos.each do |account_bill_info|
+      %tr
+        %td= account_bill_info.adv_content.title
+        %td= account_bill_info.start_date
+        %td= account_bill_info.end_date
+        %td= account_bill_info.price
+        %td= account_bill_info.amount
+        %td name
+        %td
+          = link_to "删除", manage_account_bill_account_bill_info_path(account_bill), method: :delete, class: 'btn'
+= link_to "选择广告", new_manage_account_bill_account_bill_info_path(account_bill), method: :delete, class: 'btn'
+
+
+
+

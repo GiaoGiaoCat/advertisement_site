@@ -1,0 +1,65 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        平台管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 平台列表
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-users-2') + ' 平台列表'
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(manage_platforms_path, method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 平台名称
+      %th 帐号列表
+      %th 广告列表
+      %th 花费
+      %th 操作
+  %tbody
+    - @platforms.each do |platform|
+      %tr
+        %td= platform.name
+        %td.center= platform.accounts_to_label
+        %td.center= platform.adv_contents_to_label
+        %td.center= platform.balance_total_to_lable(params[:begin], params[:end])
+        %td.center.vcenter
+          .btn-group
+            = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 编辑', edit_manage_platform_path(platform), class: 'btn btn-mini'
+            -unless current_user.role?(:secretary)
+              = link_to_with_date content_tag(:i, nil, class:'icon12 i-pencil') + ' 广告详情',  adv_contents_manage_platform_path(platform), class: 'btn btn-mini'
+              %br
+            = link_to_with_date content_tag(:i, nil, class:'icon12 i-pencil') + ' 帐号信息', manage_platform_platform_accounts_path(platform), class: 'btn btn-mini'
+            = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 花费录入', platform_balanceios_manage_platform_path(platform), class: 'btn btn-mini'
+
+.row-fluid
+  .span4
+    #dataTable_info.dataTables_info
+      = page_entries_info @platforms
+  .span8
+    .dataTables_paginate.paging_bootstrap.pagination
+      = paginate @platforms
+
+= link_to '添加平台', new_manage_platform_path, class: 'btn btn-primary'

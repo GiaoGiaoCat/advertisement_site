@@ -1,0 +1,37 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 自有应用管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 渠道配置管理'
+.container
+  .title-and-new
+.row-fluid
+  = form_tag manage_adv_tactics_multi_path(adv_content_id: @adv_content_id), :class => "form-search right span12" do
+    %p
+      = submit_tag "完成", :class => "btn btn-primary"
+    -@adv_settings.each do |setting|
+      -if setting.adv_tactics.size != 0
+        %p= setting.application.name
+        %table.table.table-striped
+          %thead
+            %tr
+              %th= check_box_tag 'check_all', nil, false, :class => "checkall"
+              %th channel_name
+              %th name
+              %th value
+          %tbody
+            -setting.adv_tactics.each do |tactic|
+              %tr
+                %td= check_box_tag 'ids[]', tactic.id
+                %td= setting.channel
+                %td= tactic.to_label
+                %td= tactic.value
+    = submit_tag "完成", :class => "btn btn-primary"
+    = link_to '返回', manage_adv_contents_path, class: 'btn btn-primary'

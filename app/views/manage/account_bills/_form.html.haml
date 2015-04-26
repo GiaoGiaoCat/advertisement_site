@@ -1,0 +1,23 @@
+.container
+  = simple_form_for [:manage, @account_bill] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :amount, label: ' 安装量', disabled: @account_bill.checked?
+      = f.input :company, label: ' 公司', disabled: @account_bill.checked?
+      = f.input :balance, label: ' 金额', disabled: @account_bill.checked?
+      = f.input :tax, label: '税点', disabled: @account_bill.checked?
+      = f.input :after_tax_balance, label: '税后金额', disabled: @account_bill.checked?
+      = f.input :details, hint: "#{@account_bill.details.url ? @account_bill.details.url : '上传图片'}", label: "对账单", disabled: @account_bill.checked?
+      = f.input :pay_money_pic, hint: "#{@account_bill.pay_money_pic.url ? @account_bill.pay_money_pic.url : '上传图片'}", label: "打款图", disabled: @account_bill.confirmed?
+    .control-group.datetime.optional.rule_activate_at
+      %label.datetime.optional.control-label
+        到账时间
+      .controls.controls-row
+        .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+          = f.text_field :expect_to_account_date, size: 16, required: true, disabled: @account_bill.confirmed?
+          %span.add-on
+            %i.icon16.i-calendar-4
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'
+      = link_to '取消', :back, class: 'btn'
+

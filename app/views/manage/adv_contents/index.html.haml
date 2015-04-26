@@ -1,0 +1,103 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        广告推广
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告管理
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 广告展示'
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(manage_adv_contents_path, method: :get, id: "form_test") do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            = text_field_tag :search, params[:search]
+            #effect.ui-widget-content.ui-corner-all.hiden{style: "display: none"}
+              %lable
+                是否使用高级选项
+              = check_box_tag :is_base_on_cp_report_date, 'yes', params[:is_base_on_cp_report_date].eql?("yes")
+              = select_tag :state, options_for_select(AdvContent::STATE, params[:state])
+              %br
+                -AdvContent.where(deleted: false, trash: false).each do |adv_content|
+                  %label{style: " display:inline;"}
+                    = check_box_tag 'ids[]', adv_content.id
+                    =adv_content.tag
+                  %tr
+            .inline_submit
+              = link_to "更多搜索条件", "#", class: 'btn btn-info', id: 'more_select'
+              = submit_tag "搜索", class: 'btn btn-primary'
+              -if current_user.role?(:admin)
+                = link_to " 导出 Excel", "#", class: 'btn btn-success', id: 'dump_all_excel'
+                = link_to " 导出广告历史详细 Excel", "#", class: 'btn btn-success', id: 'dump_history_excel'
+  = render partial: 'list'
+.btn-group
+  = link_to '创建广告', new_manage_adv_content_path, class: 'btn btn-primary'
+  = link_to '垃圾回收', trash_manage_adv_contents_path , class: 'btn btn-warning'
+  = link_to ' 下线广告', deleted_manage_adv_contents_path , class: 'btn btn-danger'
+
+:javascript
+    $("#search").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "#{search_autocomplete_manage_adv_contents_path}",
+              type: "post",
+              dataType: "json",
+              data: {name_startsWith: request.term },
+              success: function(data) {
+                  response($.map(data, function(item) {
+                      return {
+                          label: item.tag,
+                          value: item.tag
+                      }
+                  }));
+              }
+          });
+      },
+      minLength: 2
+  });
+  $("#dump_all_excel").click(function () {
+    excel_dump(false)
+  });
+
+  $("#dump_history_excel").click(function () {
+    excel_dump(true)
+  });
+    function excel_dump(history){
+     form =  $("#form_test")
+     path = form.attr("action");
+     content = form.serialize();
+     url = path + ".xlsx?" + content + "&excel=true"
+     if(history)
+      {url = url +"&history=true"}
+     window.location.href=url;
+    };
+    // set effect from select menu value
+   function runEffect() {
+    var selectedEffect = "blind"
+    var options = {};
+    if ( selectedEffect === "scale" ) {
+    options = { percent: 0 };
+    } else if ( selectedEffect === "size" ) {
+    options = { to: { width: 200, height: 60 } };
+    }
+    $( "#effect" ).toggle( selectedEffect, options, 500 );
+  };
+  $( "#more_select" ).click(function() {
+    runEffect();
+  });

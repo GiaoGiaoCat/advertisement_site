@@ -1,0 +1,5 @@
+database.yml
+log
+public/images
+public/uploads
+tmp/cache

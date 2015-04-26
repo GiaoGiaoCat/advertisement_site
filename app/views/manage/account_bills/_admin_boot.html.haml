@@ -1,0 +1,102 @@
+-cache(params.to_s, expires_in: 1800) do
+  %h3 为创建账单广告提醒
+  - un_checked_balance_count = 0; cp_report_num_total = 0;
+  -if @adv_contents.size > 0
+    %table#sortDataTable.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th 广告名称
+          %th 上次结算日期
+          %th 此次账期开始时间
+          %th 帐期结束时间
+          %th 结算周期
+          %th 激活数量
+          %th 单价
+          %th 金额
+      %tbody
+        -@adv_contents.each do |ad_content|
+          %tr{class: if (current_user.role?(:admin) || ad_content.user == current_user) && ad_content.should_have_cp_report?(params[:begin], params[:end]) then "warning" end }
+            %td.center= ad_content.tag
+            %td.center=  ad_content.account_bill_infos.first.nil? ? "N/E" :  ad_content.account_bill_infos.reorder("start_date").last.start_date
+            - last_notify = ad_content.adv_content_account_notifies.last
+            %td.center=  last_notify.nil? ? "N/E" : last_notify.start_date
+            %td.center=  last_notify.nil? ? "N/E" : last_notify.end_date
+            %td.center=  ad_content.adv_detail.nil? ? "N/E" : ad_content.adv_detail.balance_cycle.to_i
+            %td.center
+              =cp_report_num =  ad_content.cp_report_num(params[:begin], params[:end])
+              -cp_report_num_total += cp_report_num
+            %td.center= ad_content.price.to_f
+            %td.center
+              - un_checked_balance_count += cp_report_num * ad_content.price.to_f
+              = cp_report_num * ad_content.price.to_f
+        %td.center 汇总
+        %td.center
+        %td.center
+        %td.center
+        %td.center
+        %td.center= cp_report_num_total
+        %td.center
+        %td.center= un_checked_balance_count
+  %br
+  - begin_day = params[:begin]; end_day = params[:end]; sum = 0.0; infer = 0.0;
+  %h3 应收应付
+  %table#sortDataTable.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th 未出账账单金额
+        %th 账单创建等待对账
+        %th 对账完毕等待付款-不需发票
+        %th 对账完毕等待付款-需付发票
+        %th 对账完毕等待付款-已付发票
+        %th 确认已付款到帐
+        %th 合作停止欠结余款
+        %th 总收入
+        %th 总支出
+        %th ROI
+    %tbody
+      %tr
+        %td.center= un_checked_balance_count
+        %td.center
+          = AccountBill.state_sum_balance_range_days(begin_day, end_day,AccountBill::UN_CHECKED)
+        %td.center
+          = AccountBill.state_sum_balance_range_days_invoice(begin_day, end_day,AccountBill::UN_CHECKED, AccountBill::INVOICE_NO_NEDD)
+        %td.center
+          = AccountBill.state_sum_balance_range_days_invoice(begin_day, end_day,AccountBill::UN_CHECKED, AccountBill::INVOICE_NO_NEDD, AccountBill::INVOICE_PAYED)
+        %td.center
+          = infer = AccountBill.state_sum_balance_range_days_invoice(begin_day, end_day,AccountBill::UN_CHECKED, AccountBill::INVOICE_PAYED)
+          - sum += infer
+        %td.center
+          = infer = AccountBill.state_sum_balance_range_days(begin_day, end_day,AccountBill::FINANCE_CONFIRME)
+          - sum += infer
+        %td.center
+          = infer = AccountBill.state_sum_balance_range_days(begin_day, end_day,AccountBill::STOP_WAIT_TO_PAY)
+          - sum += infer
+        %td.center
+          - sum += un_checked_balance_count
+          = sum
+        %td.center= @platform_balance_count
+        %th.center
+          = (sum/ @platform_balance_count).round(3)
+
+  %h3 账单统计
+  %table#sortDataTable.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th
+        %th 账单创建等待对账
+        %th 对账完毕等待付款-不需发票
+        %th 对账完毕等待付款-需付发票
+        %th 对账完毕等待付款-已付发票
+        %th 确认已付款到帐
+        %th 合作停止欠结余款
+    %tbody
+      -array = [[AccountBill::UN_CHECKED], [AccountBill::UN_CHECKED, AccountBill::INVOICE_NO_NEDD], [AccountBill::UN_CHECKED, AccountBill::INVOICE_PAYED, AccountBill::INVOICE_NEDD_NOT_PAY], [AccountBill::UN_CHECKED, AccountBill::INVOICE_PAYED], [AccountBill::FINANCE_CONFIRME], [AccountBill::STOP_WAIT_TO_PAY]]
+      - total = array.collect { |item| AccountBillInfo.happpen_time_compute(begin_day, end_day, *item)}
+      %tr
+        %td.center 金额
+        - total.each do |item|
+          %td.center= item[0]
+      %tr
+        %td.center 账单数量
+        - total.each do |item|
+          %td.center= item[1]

@@ -1,0 +1,9 @@
+/*
+ *= require_self
+
+ * Core stylesheets do not remove
+ *= require bootstrap/bootstrap
+ *= require bootstrap/bootstrap-responsive
+ *= require pages
+
+ */

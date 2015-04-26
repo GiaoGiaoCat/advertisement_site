@@ -1,0 +1,15 @@
+%tbody
+  %tr
+    %td= adv_content.id
+    %td= adv_content.tag
+    %td= adv_content.title
+    %td= adv_content.plan_view_count
+    %td= adv_content.price
+    %td= unless adv_content.user.nil? then adv_content.user.email end
+    %td
+      .btn-group
+        = link_to (" 操作" + content_tag(:span, nil, :class => "caret")).html_safe, "#", :class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown"
+        %ul.dropdown-menu
+          - if current_user.role?(:admin)
+            -state_operate_able(adv_content).each do |item|
+              %li= item

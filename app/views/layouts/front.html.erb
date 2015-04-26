@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱火移动广告平台</title>
+    <%= csrf_meta_tags %>
+
+    <!-- app stylesheets -->
+    <%= stylesheet_link_tag "front", :media => "all" %>
+
+    <!--[if IE 8]><%= stylesheet_link_tag "ie8", :media => "all" %><![endif]-->
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      </script><%= javascript_include_tag "html5shiv" %></script>
+    <![endif]-->
+
+    <!-- For third-generation iPad with high-resolution Retina display: -->
+    <!-- Size should be 144 x 144 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-144x144-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
+
+    <!-- For iPhone with high-resolution Retina display: -->
+    <!-- Size should be 114 x 114 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-114x114-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '114x114' %>
+
+    <!-- For first- and second-generation iPad: -->
+    <!-- Size should be 72 x 72 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72' %>
+
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <!-- Size should be 57 x 57 pixels -->
+    <%= favicon_link_tag 'apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png' %>
+
+    <!-- For all other devices -->
+    <!-- Size should be 32 x 32 pixels -->
+    <%= favicon_link_tag 'ico/favicon.ico', :rel => 'shortcut icon' %>
+
+  </head>
+  <body>
+    <div class="page-content-wrapper">
+      <header class="header">
+        <div class="row">
+          <div class="span3">
+              <h1 class="logo"><a href="/"><%= image_tag "new_logo.png", alt: "爱火移动广告" %></a></h1>
+          </div>
+
+          <div class="menu span9 pull-right">
+            <ul class="menu-list">
+              <li class="menu-item message">
+                欢迎使用爱火移动广告平台！客服联系：400-706-5868 或 QQ：20108363
+              </li>
+              <li class="menu-item highlight-item">
+                <%= link_to '点击这里注册新账号', new_user_registration_path %>
+              </li>
+              <li class="menu-item login-item">
+                <%= link_to '登录', new_user_session_path, class: "btn btn-inverse" %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <!-- header end -->
+      <div class="hero-unit">
+        <div class="container">
+            <h1>为开发者创造更多的广告收入</h1>
+            <h2>携手开发者，以稳定安全的广告形式和结算方法，激发移动应用的高价值。</h2>
+
+            <ul class="row">
+                <li class="span3 plan float-up">
+                    <p>众多优质广告资源</p>
+                    <p>联手业内领先的品牌，提供优质的广告资源。保证开发者的每一笔订单都会获得高额回报。</p>
+                </li>
+
+                <li class="span3 structure float-up">
+                    <p>安全稳定的投放策略</p>
+                    <p>丰富的开关和订制功能，可以让你随意控制广告的展现时间和形式。</p>
+                </li>
+
+                <li class="span3 collaborate float-up">
+                    <p>炫酷的广告展现形式</p>
+                    <p>提供多种广告展现形式，根据开发者的需要还可以为您订制适合自己应用的展现形式。</p>
+                </li>
+
+                <li class="span3 deliver float-up">
+                    <p>详细透明的数据统计</p>
+                    <p>公开透明的数据分析系统，提供精准的收入报表，确保开发者收益最大化，也为开发者优化应用提供数据。</p>
+                </li>
+            </ul>
+        </div>
+      </div>
+      <!-- hero-unit end -->
+
+<div class="container">
+    <div class="row get-started-now">
+        <div class="span10 offset1 white-panel button-text-panel">
+            <h2>传统的展示、点击广告收入太少？想让收入增长10倍？</h2>
+            <%= link_to '立刻开始', new_user_registration_path, class: 'btn btn-large btn-warning' %>
+        </div>
+    </div>
+
+
+
+    <div class="row logoset">
+        <div class="span12">
+            <img src="https://gathercontent.com/assets/img/homepage/logoset-3.jpg" alt="logoset-1" width="955" height="71" />
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="span12 white-panel better-manage">
+            <div class="container">
+                <div class="row cf">
+                    <div class="span5">
+                        <div class="padding-large">
+                            <h2>更好的管理你的应用和广告</h2>
+
+                            <ul class="green-checks">
+                                <li>每个开发者可以创建多个应用</li>
+                                <li>每个应用独立控制广告展现参数</li>
+                                <li>实时计算每一笔收入，拥有详尽的报告</li>
+                                <li>从申请提现到现金到账仅需24小时</li>
+                            </ul>
+
+                            <%= link_to '立刻开始', new_user_registration_path, class: 'btn btn-warning btn-large' %>
+
+                            <p class="small-text">注册仅需10秒钟，系统自动审核不用等待。</p>
+                        </div>
+                    </div>
+                    <div class="span8 slider-container">
+                        <ul class="slider pull-right">
+                            <li>
+                                <img src="https://gathercontent.com/assets/img/homepage/better-manage.png" alt="logoset-1" width="624" height="449" />
+                            </li>
+                        </ul>
+                    </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="span12 white-panel no-padding slider">
+        <div class="slider-container">
+          <div class="slider-content">
+            <!-- <img src="https://gathercontent.com/assets/img/homepage/slider/deer.png" alt="Deer Digital" width="174" height="38" /> -->
+            <blockquote>作为一款日活跃用户仅几百的小型工具类APP，爱火移动广告平台竟然能帮我每月赚得几千元收入。这在以前是不可想象的。感谢爱火，让我再也不用担心独立开发者赚不到钱了。</blockquote>
+            <cite>&mdash;&mdash; 个人开发者小吴</cite>
+          </div>
+          <%= image_tag "becky.jpg", width: '998', height: '355' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row get-started-now">
+        <div class="span12 white-panel button-text-panel">
+            <div class="white-panel-content">
+                <h2>注册帐号，下载SDK，嵌入到自己的应用中，推广应用，然后坐等收钱。</h2>
+                <a href="#" class="btn btn-large btn-success">下载最新版本SDK</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+</div> <!-- page-content-wrapper -->
+    <footer class="footer">
+      <div class="container">
+          <div class="row">
+              <div class="span12">
+                  <p>爱火移动广告平台致力于帮助个人开发者和小型团队获得稳定的高收入。</p>
+                  <p>Copyright @ 2013 aihuo360.com All Rights Reserved. 爱火移动广告平台 版权所有</p>
+                  <p>京ICP备12009107号-1 北京蓝色风潮科技有限公司</p>
+              </div>
+          </div>
+      </div>
+
+    </footer>
+
+  </body>
+</html>

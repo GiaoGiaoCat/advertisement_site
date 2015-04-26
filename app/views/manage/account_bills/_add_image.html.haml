@@ -1,0 +1,16 @@
+#account_biil_infocModal.modal.hide.fade{tabindex: "-1", role: "dialog", "aria-labelledby" => "myModalLabel", "aria-hidden" => "true"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", "aria-hidden" => "true"}
+      x
+    %h3#myModalLabel
+      创建账单
+  .modal-body
+    = simple_form_for [:manage, @account_bill], method: :PATCH, :html => { :class => 'form-horizontal' } do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :pay_money_pic, label: '上传打款截图'
+        = hidden_field_tag :add_image, true
+      .form-actions
+        = f.button :submit, "商务确认-付款完毕", class: 'btn btn-primary'
+  .modal-footer
+

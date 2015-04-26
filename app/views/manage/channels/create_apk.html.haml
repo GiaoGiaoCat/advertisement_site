@@ -1,0 +1,47 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li
+        合作渠道管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 创建打包任务
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-cloud-upload') + ' 创建打包任务'
+
+.widget
+  .widget-title
+    .icon
+      %i.icon20.i-stack-checkmark
+    %h4 创建打包任务
+
+  .widget-content
+    = form_tag("http://115.29.173.254/apk_auto/index.php/Home/ApkTask", method: :post, class: 'simple_form form-horizontal', target: '_blank') do |f|
+      .control-group.string.required.channel_name
+        %label.string.required.control-label{for: 'app_package'}
+          %abbr{title: 'required'} *
+          package_name
+        .controls.controls-row
+          = text_field_tag 'app_package', Random.new_seed.to_s[0, 12], class: 'string required', placeholder: 'app_package'
+
+      .control-group.string.required.channel_name
+        %label.string.required.control-label{for: 'app_aliases'}
+          %abbr{title: 'required'} *
+          应用别名
+        .controls.controls-row
+          = text_field_tag 'app_aliases', nil, class: 'string required', placeholder: '请输入应用名称'
+
+      .control-group.string.required.channel_name
+        %label.string.required.control-label{for: 'app_channels'}
+          %abbr{title: 'required'} *
+          新渠道名称
+        .controls.controls-row
+          = text_field_tag 'app_channels', @channel.name, class: 'string required span12', placeholder: '请输入渠道名称:多个名称请用英文的逗号`,`分割'
+      .form-actions
+        = submit_tag "去打包", :class => 'btn btn-primary'
+

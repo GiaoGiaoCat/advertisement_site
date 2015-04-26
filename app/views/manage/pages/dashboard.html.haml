@@ -1,0 +1,102 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 平台数据概览
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-dashboard') + ' 平台数据概览 beta'
+
+.row-fluid
+  .widget
+    .widget-title
+      .icon
+        %i.icon20.i-info-2
+      %h4 说明
+      = link_to '', '#', class: 'minimize'
+    .widget-content
+      %ul
+        %li 本页数据都是静态测试数据，不可参考。
+        %li 下单/成单比率饼状图仅显示排名考前的开发者应用（未完成静态效果）。
+        %li 30天内购物车转化率线状图(全部应用)（未完成静态效果）。
+
+.row-fluid
+  .widget
+    .widget-title
+      .icon
+        %i.icon20.i-stats
+      %h4 平台全部应用30天内订单趋势图
+    .widget-content
+      .row-fluid
+        = content_tag(:div, nil, data: { "total-orders" => @total_orders.to_json, "completed-orders" => @completed_orders.to_json }, id: "month_count_holder", class: 'chart')
+
+.row-fluid
+  .span6
+    .widget
+      .widget-title
+        .icon= content_tag(:i, nil, class: 'icon20 i-info-2')
+        %h4 平台统计汇报
+      .widget-content.center
+        .vital-stats
+          %ul.unstyled
+            %li
+              .item
+                .icon.orange= content_tag(:i, nil, class: 'i-users-2')
+                %span.percent 8
+                %span.txt 入驻开发者总数
+            %li
+              .item
+                .icon.blue= content_tag(:i, nil, class: 'i-rocket')
+                %span.percent 8
+                %span.txt 平台应用总数
+            %li
+              .item
+                .icon.blue= content_tag(:i, nil, class: 'i-stack-list')
+                %span.percent 8
+                %span.txt 30日累计订单
+            %li
+              .item
+                .icon.green= content_tag(:i, nil, class: 'i-stack-checkmark')
+                %span.percent 8
+                %span.txt 30日成交订单
+            %li
+              .item
+                .icon= content_tag(:i, nil, class: 'i-cart-5')
+                %span.percent 8
+                %span.txt 30日累计购物车
+            %li
+              .item
+                .icon.red= content_tag(:i, nil, class: 'i-coin')
+                %span.percent.small_font 800000.00
+                %span.txt 30日成交金额
+  .span6
+    .widget
+      .widget-title
+        .icon= content_tag(:i, nil, class: 'icon20 i-podium')
+        %h4 7天内成交订单增长量排名
+      .widget-content
+        .week_applist
+          %ol
+            - 5.times do
+              %li
+                %span.appname
+                  = link_to content_tag(:i, nil, class: 'icon14 i-rocket') + "手电筒", '#'
+                %span.order.span3
+                  %span.badge.badge-info 56
+                  %span.badge.badge-success 32
+                %span.user.span3
+                  = link_to content_tag(:i, nil, class: 'icon14 i-user') + "小猪", '#'
+
+.row-fluid
+  .widget
+    .widget-title
+      .icon
+        %i.icon20.i-stats
+      %h4 平台全部应用30天内购物车转化
+    .widget-content
+      .row-fluid
+        = content_tag(:div, nil, data: { "total-orders" => @total_orders.to_json, "completed-orders" => @completed_orders.to_json }, id: "month_carts_holder", class: 'chart')

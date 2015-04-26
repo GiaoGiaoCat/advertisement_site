@@ -1,0 +1,36 @@
+.widget
+  .widget-title
+    .icon
+      %i.icon20.i-stack-checkmark
+    %h4 帐号验证
+
+  .widget-content
+    = simple_form_for [:manage, @profile], :html => { :class => 'form-horizontal' } do |f|
+      .alert
+        %string
+          %i.icon24.i-warning
+          注意！
+        为了保障您的帐号安全，以下信息提交后将无法修改，请认真填写，如需修改请联系客服。
+      / = f.error_notification
+      .control-group.radio_buttons.required.manage_application_platform
+        %label.radio_buttons.required.control-label
+          %abbr{ title: 'required' } *
+          帐号类型
+        .controls.controls-row
+          - Profile::TYPES.each do |type|
+            %label.radio.inline.span3
+              = f.radio_button("type_name", type[1])
+              = type[0]
+      = f.input :name, :label => "开发者姓名", hint: '企业用户请填写公司全名'
+      = f.input :phone, :label => "电话号码"
+      = f.input :qq, :label => "QQ号码"
+
+      = f.input :identity_card, :label => "身份证号码", hint: '企业用户请填写营业执照编号'
+      = f.input :bank, :collection => Profile::BANKS, :prompt => "选择银行", :label => "银行"
+      = f.input :bank_address, :label => "开户行地址", input_html: { class: 'span12' }
+      = f.input :bank_account, :label => "银行账号"
+      = f.input :bank_account_name, :label => "开户人姓名", hint: '企业用户请填写银行开户名称'
+
+      .form-actions
+        = f.button :submit, "提交", :class => 'btn btn-primary'
+        = link_to '取消', manage_welcome_path, :class => 'btn'

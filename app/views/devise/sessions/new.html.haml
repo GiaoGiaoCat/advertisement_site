@@ -1,0 +1,28 @@
+#log
+  .page-header
+    %h3.center 用户登录
+  = form_for(resource, :as => resource_name, :url => session_path(resource_name), html: { id: "login-form", class: 'form-horizontal' }) do |f|
+    .row-fluid
+      = show_flash_messages
+      .control-group
+        .controls-row
+          .icon
+            %i.icon20.i-envelop-2
+          = f.email_field :email, placeholder: 'Email', class: 'span12', :autofocus => true
+
+      .control-group
+        .controls-row
+          .icon
+            %i.icon20.i-key
+          = f.password_field :password, placeholder: 'Password', class: 'span12'
+
+      .form-actions.full
+        %label.checkbox.pull-left
+          = check_box_tag 'user[remember_me]'
+          / = f.check_box :remember_me
+          %span.pad-left5 记住我?
+        = submit_tag "登录", class: 'btn btn-primary pull-right span5'
+  .center
+    = "没有帐号? #{link_to(content_tag(:strong, 'Create one now'), '#', id: 'register')}".html_safe
+/ render "devise/shared/links"
+

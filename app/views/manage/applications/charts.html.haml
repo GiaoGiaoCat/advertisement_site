@@ -1,0 +1,73 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 应用推广统计
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + "#{@application.name} - 推广统计"
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(charts_manage_application_path(@application), method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "查看报表", class: 'btn btn-primary'
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 统计报表视图
+      #channel_view.widget-content
+        #dataTable_length.dataTables_length
+          .controls.controls-row
+        - if @adv_statistics
+          = render "success_notification"
+          = content_tag(:div, nil, data: { "ad-views" => @adv_statistics.chart_data(:view_count).to_json, "ad-clicks" => @adv_statistics.chart_data(:click_count).to_json, "ad-installs" => @adv_statistics.chart_data(:install_count).to_json }, id: "app_contents_data")
+          - if @adv_statistics && !@adv_statistics.size.zero?
+            #app_contents_data_holder
+          - if @adv_statistics.size.zero?
+            / #app_contents_data_holder
+            .alert
+              %string
+                %i.icon24.i-warning
+                抱歉！
+              暂时没有数据。
+
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 广告
+      %th 有效
+      %th 展示次数
+      %th 点击次数
+      %th 安装次数
+  %tbody
+    - @adv_contents.each do |adv_content|
+      %tr
+        %td= adv_content.tag
+        %td.center= show_enabled_status(@application.adv_contents.include? adv_content)
+        %td.center= @adv_statistics.by_advertisement(adv_content.id).sum(:view_count)
+        %td.center= @adv_statistics.by_advertisement(adv_content.id).sum(:click_count)
+        %td.center= @adv_statistics.by_advertisement(adv_content.id).sum(:install_count)

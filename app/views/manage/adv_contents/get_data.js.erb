@@ -1,0 +1,7 @@
+$("#adv_content_price").val("<%=@adv_content.price%>")
+$("#adv_content_install_count").val("<%=@install_count %>")
+$("#account_bill_info_next_end_date").val("<%=@next_end_date.to_s%>")
+var txt3=document.createElement("b");  // 以 DOM 创建新元素
+txt3.innerHTML='<%="结账周期:#{@adv_content.adv_detail.balance_cycle}; 上个结算时间:#{@last_date}"%>'
+$("#p_append_class > b").remove()
+$("#p_append_class").append(txt3)

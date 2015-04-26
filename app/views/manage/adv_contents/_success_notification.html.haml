@@ -1,0 +1,14 @@
+.alert.alert-success
+  %button.close{'data-dismiss' => 'alert', type: 'button'} ×
+  %strong
+    %i.icon24.i-checkmark-circle
+    搜索成功
+    - report_count = sum_count @adv_advertiser_reports.chart_data(:count)
+    - text = "从 #{params[:begin]} 到 #{params[:end]} 共有"
+    - text += display_sum_count(@adv_statistics, :view)
+    - text += display_sum_count(@adv_statistics, :click)
+    - text += display_sum_count(@adv_statistics, :install)
+    - text += display_sum_count(@adv_advertiser_reports, :active)
+    - text += "平均展示收入 #{number_to_currency @adv_content.income_level(@adv_statistics), unit: "￥"}。"
+
+    = text

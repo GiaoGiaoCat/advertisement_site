@@ -1,0 +1,34 @@
+.container
+  = simple_form_for [:manage, @adv_content] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :title, label: '标题'
+      = f.input :version_code, label: '版本代码', hint: "整数大于0"
+      = f.input :version_name, label: ' 版本名称'
+      = f.input :tag, label: '内部标签'
+      = f.input :price, label: '单价(元)'
+      = f.input :description, label: '描述'
+      = f.input :apk_sign
+      = f.input :plan_view_count, label: '日安装控量'
+      .control-group
+        .controls
+          = image_tag(@adv_content.icon_url) if @adv_content.icon.present?
+      = f.input :icon, as: :file, label: 'icon', hint: '72x72'
+      .control-group
+        .controls
+          = image_tag(@adv_content.banner_url) if @adv_content.banner.present?
+      = f.input :banner, as: :file, label: '通知栏图片', hint: '480x100'
+      .control-group
+        .controls
+          = image_tag(@adv_content.square_banner_url) if @adv_content.square_banner.present?
+      = f.input :square_banner, as: :file, label: '弹出图片', hint: '480x480'
+      .control-group
+        .controls
+          = link_to @adv_content.url_url, @adv_content.url_url if @adv_content.url.present?
+      = f.input :url, as: :file, label: 'apk'
+      = f.input :website, label: '微信推广专用网址'
+      - if current_user.role?(:admin)
+        = f.association :user, collection: User.channel_manager.all, :label => "分配给:", label_method: :email, value_method: :id, inputnclude_blank: true
+    .form-actions
+      = f.submit "下一步", class: 'btn btn-primary'
+      = link_to '取消', manage_adv_contents_path, class: 'btn'

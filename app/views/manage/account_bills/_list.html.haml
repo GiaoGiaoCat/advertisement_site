@@ -1,0 +1,39 @@
+%h3 账单信息
+-checked_count = 0; payed_count = 0; balance_total = 0.0;
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th ID
+      %th 公司名称
+      %th 渠道经理
+      %th 激活数量
+      %th 金额(税前/后)
+      %th 广告列表
+      %th 状态
+      %th 创建时间
+      %th 预计到账时间
+      %th 操作
+  %tbody
+    -@account_bills.each do |account_bill|
+      -unless account_bill.unchecked? then checked_count += 1 end
+      -if account_bill.payed?
+        - payed_count += 1
+        - balance_total += account_bill.balance
+      %tr
+        %td.center= account_bill.id
+        %td.center= account_bill.company
+        %td.center= account_bill.user.nil? ? "N/E" : account_bill.user.username
+        %td.center= account_bill.amount
+        %td.center= "#{account_bill.balance}/#{account_bill.after_tax_balance}"
+        %td.center= account_bill.adv_content_to_label
+        %td.center= account_bill.state_to_label
+        %td.center= account_bill.created_at.strftime('%Y-%m-%d')
+        %td.center= account_bill.expect_to_account_date ? account_bill.expect_to_account_date.strftime('%Y-%m-%d') : "暂无信息"
+        %td
+          .btn-group
+            = link_to "账单详情", manage_account_bill_account_bill_infos_path(account_bill), class: 'btn btn-sm'
+            %br
+            = link_to ("操作" + content_tag(:span, nil, :class => "caret")).html_safe, "#", :class => "btn btn-sm dropdown-toggle", "data-toggle" => "dropdown"
+            %ul.dropdown-menu
+              -operate_label_array(account_bill).each do |link|
+                %li= link

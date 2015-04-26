@@ -1,0 +1,17 @@
+#account_biil_infocModal.modal.hide.fade{tabindex: "-1", role: "dialog", "aria-labelledby" => "myModalLabel", "aria-hidden" => "true"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", "aria-hidden" => "true"}
+      x
+    %h3#myModalLabel
+      创建账单
+  .modal-body
+    = simple_form_for [:manage, @account_bill], method: :POST, :html => { :class => 'form-horizontal' } do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :company, label: '公司名称'
+        -if current_user.role?(:admin)
+          = f.association :user, collection: User.channel_manager.map{|user| [user.email, user.id]}, label: '分配给'
+      .form-actions
+        = f.button :submit, "确定", class: 'btn btn-primary'
+  .modal-footer
+

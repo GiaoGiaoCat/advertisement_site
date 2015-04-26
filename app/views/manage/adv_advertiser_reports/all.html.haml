@@ -1,0 +1,24 @@
+#advcontents-list
+  %table.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th 广告物料
+        %th 数据
+        %th 日期
+        %th
+    %tbody
+    %tbody
+      - @adv_advertiser_reports.each do |adv_advertiser_report|
+        %tr
+          %td= adv_advertiser_report.adv_content.tag
+          %td= adv_advertiser_report.count
+          %td= adv_advertiser_report.report_date
+          %td.center.vcenter
+            .btn-group
+              =link_to '编辑', edit_manage_adv_content_adv_advertiser_report_path(adv_advertiser_report.adv_content, adv_advertiser_report), class: 'btn btn-mini btn-primary'
+              = link_to '删除', manage_adv_content_adv_advertiser_report_path(adv_advertiser_report.adv_content, adv_advertiser_report), :confirm => '确认删除?', :method => :delete, class: 'btn btn-mini btn-danger'
+              = link_to '查看', manage_adv_content_adv_advertiser_report_path(adv_advertiser_report.adv_content, adv_advertiser_report), class: 'btn btn-mini btn-success'
+=paginate @adv_advertiser_reports
+=paginate @adv_advertiser_reports
+
+

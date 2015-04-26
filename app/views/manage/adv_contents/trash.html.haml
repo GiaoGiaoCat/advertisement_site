@@ -1,0 +1,47 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        广告
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告回收站管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 广告展示'
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(trash_manage_adv_contents_path, method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            = text_field_tag :search, params[:search]
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr{style: "font-size: 12px;"}
+      %th ID
+      %th 内部标签
+      %th 标题
+      %th 日安装控量
+      %th 单价
+      %th 用户
+      %th 操作
+  %tbody
+    = render @adv_contents
+.btn-group
+  = link_to '返回', manage_adv_contents_path, class: 'btn btn-primary'

@@ -1,0 +1,27 @@
+# Sample localization file for Kaminari. You can override these values in your app's locales file if you want.
+en:
+  views:
+    pagination:
+      # first: "&laquo; First"
+      # last: "Last &raquo;"
+      # previous: "&lsaquo; Prev"
+      # next: "Next &rsaquo;"
+      # truncate: "&hellip;"
+      first: "&laquo; 首页"
+      last: "末页 &raquo;"
+      previous: "&lsaquo; 前一页"
+      next: "下一页 &rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          # zero: "No %{entry_name} found"
+          # one: "Displaying <b>1</b> %{entry_name}"
+          # other: "Displaying <b>all %{count}</b> %{entry_name}"
+          zero: "没有找到记录"
+          one: "找到 <b>1</b> 条记录"
+          other: "找到 <b> %{count}</b> 条记录"
+      more_pages:
+        # display_entries: "Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
+        display_entries: "显示第 <b>%{first}&nbsp;-&nbsp;%{last}</b> 条，共 <b>%{total}</b> 条记录"

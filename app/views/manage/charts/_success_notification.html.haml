@@ -1,0 +1,9 @@
+.alert.alert-success
+  %button.close{'data-dismiss' => 'alert', type: 'button'} ×
+  %strong
+    %i.icon24.i-checkmark-circle
+    搜索成功
+  - if current_user.role?(:admin)
+    = "从 #{params[:begin]} 到 #{params[:end]} 共有激活用户 #{sum_count(@devices)} 个，共产生订单 #{sum_count(@orders)} 份，其中发货 #{sum_count(@shipped_orders)} 份，其中成交 #{sum_count(@completed_orders)} 份。"
+  - else
+    = "从 #{params[:begin]} 到 #{params[:end]} 共有激活用户 #{sum_count(@devices_for_spreader)} 个。"

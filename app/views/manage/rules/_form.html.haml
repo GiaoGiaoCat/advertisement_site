@@ -1,0 +1,24 @@
+.widget
+  .widget-title
+    .icon
+      %i.icon20.i-stack-checkmark
+    %h4 规则信息
+
+  .widget-content
+    = simple_form_for [:manage, @channel, @rule], :html => { :class => 'form-horizontal' } do |f|
+      = f.input :name, label: "规则名称"
+      = f.input :ratio, label: "参数"
+      .control-group.datetime.optional.rule_activate_at
+        %label.datetime.optional.control-label
+          %abbr(title="required") *
+          起效时间
+        .controls.controls-row
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = f.text_field :activate_at, size: 16, value: @rule.activate_at
+            %span.add-on
+              %i.icon16.i-calendar-4
+      = f.association :applications, as: :check_boxes, label: '关联应用', wrapper_html: { class: 'apps_warp' }, value_method: :to_param, :checked => @rule.applications.map{ |app| app.to_param }
+
+      .form-actions
+        = f.button :submit, "保存", :class => 'btn btn-primary'
+        = link_to '取消', :back, :class => 'btn'

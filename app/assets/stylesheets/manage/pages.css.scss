@@ -1,0 +1,76 @@
+// Place all the styles related to the manage::Pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* ------------------ all page --------------------*/
+.loading-indicator {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 55px;
+  right: 10px;
+  display: none;
+}
+
+/* ------------------ dashboard page --------------------*/
+.vital-stats .item .small_font { font-size: 14px; }
+
+.week_applist {
+  ol {
+    list-style-position: inside;
+    margin-left: 0; margin-bottom: 10px; min-height: 40px;
+    li {
+      margin-bottom: 0;border-top: 1px dashed #c9c9c9; padding: 10px 15px; position: relative;
+      &:last-child { border-bottom: 1px dashed #c9c9c9; } // :last-child
+      &:nth-child(even) {background: #f8f8f8;} // :nth-child(even)
+      .order { float: right; }
+      .user { float: right; }
+      .appname {font-weight: bold;}
+    } // li
+  } // ul
+}
+
+.inline_submit {
+  display: inline-block;
+  input { display: inline-block; margin-bottom: 10px; }
+}
+
+/* ------------------ faq page --------------------*/
+.answer .page-header { margin-bottom: 10px; }
+.answer_content { margin-bottom: 30px; }
+
+/* ------------------ flot widget --------------------*/
+#month_count_holder { margin-top: 20px; height: 200px; }
+#month_carts_holder { margin-top: 20px; height: 200px; }
+#adv_contents_data_holder { margin-top: 20px; height: 200px; }
+#app_contents_data_holder { margin-top: 20px; height: 200px; }
+
+/* ------------------ NoticeNews widget --------------------*/
+.notice_news {
+  ul {
+    list-style:none; margin-left: 0; margin-bottom: 10px; min-height: 40px;
+    li {
+      margin-bottom: 0;border-top: 1px dashed #c9c9c9; padding: 10px 15px; position: relative;
+      &:last-child { border-bottom: 1px dashed #c9c9c9; } // :last-child
+      &:nth-child(even) {background: #f8f8f8;} // :nth-child(even)
+      .date {margin-right: 15px; float: right;}
+      .title {font-weight: bold;}
+    } // li
+  } // ul
+} // .notice_news
+
+/* ------------------ PopResource widget --------------------*/
+.pop_res {
+  padding: 2px;
+  ul {
+    padding:0; margin: 0; list-style: none;
+    li {
+      padding-top:5px; clear:both;
+      img { float: left; padding-right: 10px; padding-top: 7px; } // img
+      span {
+        &.title { display: block; font-weight: bold; } // .title
+      } // span
+      &:first-child { padding-top: 0; }
+    } // li
+  } // ul
+}

@@ -1,0 +1,25 @@
+#account_biil_infocModal.modal.hide.fade{tabindex: "-1", role: "dialog", "aria-labelledby" => "myModalLabel", "aria-hidden" => "true"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", "aria-hidden" => "true"}
+      x
+    %h3#myModalLabel
+      对账确认
+  .modal-body
+    = simple_form_for [:manage, @account_bill], method: :patch, :html => { :class => 'form-horizontal' } do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :amount, label: '安装量', input_html: {value: @total_amount}
+        = f.input :balance, label: '总金额',input_html: {value: @total_balance}
+        = f.input :tax, label: '税点'
+        = f.input :after_tax_balance, label: '税后金额'
+        = f.input :details, as: :file, label: '对账图', hint: "#{@account_bill.details.url ? @account_bill.details.url : "上传图片"}"
+        =f.collection_radio_buttons :is_public, [[true, "对公"], [false, "对私"]], :first, :last, required: true, input_html:{style: 'inline'}
+        =f.collection_radio_buttons :invoice_state, [[1, '需要发票'] ,[0, '不需要发票']], :first, :last, required: true
+        = check_box_tag 'stop_wait_to_pay', true, (@account_bill.state.to_i == AccountBill::STOP_WAIT_TO_PAY)
+        =label_tag 'stop_wait_to_pay', "合作停止欠结余款"
+        = hidden_field_tag 'checked', true
+      .form-actions
+        = f.button :submit, "对账确认", class: 'btn btn-primary'
+  .modal-footer
+
+

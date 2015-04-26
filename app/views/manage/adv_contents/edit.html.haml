@@ -1,0 +1,18 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        广告推广
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告管理
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon12 i-pencil' ) + '编辑广告信息'
+    -unless @adv_content.adv_detail.nil?
+      = link_to "编辑账单信息", edit_manage_adv_content_adv_detail_path(@adv_content, @adv_content.adv_detail), class: 'btn btn-primary'
+    -else
+      = link_to "创建账单信息", new_manage_adv_content_adv_detail_path(@adv_content), class: 'btn btn-primary'
+    - if current_user.role?(:admin)
+      = link_to "删除广告", manage_adv_content_path(@adv_content), method: :delete, class: 'btn btn-danger'
+=render "form"

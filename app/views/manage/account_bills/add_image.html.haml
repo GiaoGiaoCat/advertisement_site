@@ -1,0 +1,38 @@
+
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        ="账单/#{@account_bill.company}"
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 上传打款截图
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-rocket') + '商务确认-付款完毕'
+
+
+.container
+  = simple_form_for @account_bill, url: pay_confirm_manage_account_bill_path(@account_bill), method: :post ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :amount, label: ' 安装量', disabled: true
+      = f.input :company, label: ' 公司', disabled: true
+      = f.input :balance, label: ' 金额', disabled: true
+      = f.input :tax, label: '税点', disabled: true
+      = f.input :after_tax_balance, label: '税后金额', disabled: true
+      = f.input :pay_money_pic, label: "打款图"
+      = @account_bill.pay_money_pic
+    .control-group.datetime.optional.rule_activate_at
+      %label.datetime.optional.control-label
+        到账时间
+      .controls.controls-row
+        .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+          = f.text_field :expect_to_account_date, size: 16, required: true
+          %span.add-on
+            %i.icon16.i-calendar-4
+    .form-actions
+      = f.submit "商务确认-付款完毕", class: 'btn btn-primary'
+      = link_to '取消', :back, class: 'btn'
+

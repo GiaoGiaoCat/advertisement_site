@@ -1,0 +1,49 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 合作渠道管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-radio-2') + ' 合作渠道管理'
+
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 渠道名称
+      %th 级别
+      %th 有效
+      %th 拥有者
+      %th 推广应用
+      %th 自动扣量
+      %th 自动扣量开始时间
+      %th
+  %tbody
+    - @channels.each do |channel|
+      %tr
+        %td= channel.name
+        %td.center= channel.level
+        %td.center= show_enabled_status(channel.enabled)
+        %td= channel.spreader.try(:username)
+        %td= channel.applications.count
+        %td.center= show_enabled_status(channel.auto_ratio)
+        %td.center
+          = channel.auto_ratio_activate_at.strftime('%Y-%m-%d') if channel.auto_ratio_activate_at
+        %td.center.vcenter
+          .btn-group
+            = link_to content_tag(:i, nil, class:'icon12 i-lab') + ' 管理规则', manage_channel_rules_path(channel), class: 'btn btn-mini'
+            = link_to content_tag(:i, nil, class:'icon12 i-cloud-upload') + ' 打包应用', create_apk_manage_channel_path(channel), class: 'btn btn-mini'
+            = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 编辑', edit_manage_channel_path(channel), class: 'btn btn-mini'
+.row-fluid
+  .span4
+    #dataTable_info.dataTables_info
+      = page_entries_info @channels
+  .span8
+    .dataTables_paginate.paging_bootstrap.pagination
+      = paginate @channels
+
+= link_to '创建新渠道', new_manage_channel_path, class: 'btn btn-primary'

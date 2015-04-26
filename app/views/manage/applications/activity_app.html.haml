@@ -1,0 +1,45 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 自有应用管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 渠道配置管理'
+.container
+  .title-and-new
+    %h3= "#{@adv_content.tag}/渠道推广配置"
+    .inline-form
+.row-fluid
+  = form_tag multi_manage_applications_path(adv_content_id: @adv_content.id),:method => 'post', :class => "form-search right span12" do
+    %p
+      = submit_tag "下一步", :class => "btn btn-primary"
+    %p 应用昨日数据展现
+    %table.table.table-striped
+      %thead
+        %tr
+          %th= check_box_tag 'check_all', nil, false, :class => "checkall"
+          %th App Name
+          %th 展示
+          %th 下载完成
+          %th 安装提示
+          %th 安装完成
+          %th 无广告报警
+      %tbody
+        -@play_advertising_app.each do |app|
+          %tr
+            %td= check_box_tag 'ids[]', app.id
+            %td= app.name
+            %td.center
+              = app.adv_contents_params[0]
+            %td.center
+              = app.adv_contents_params[1]
+            %td= app.adv_contents_params[2]
+            %td= app.adv_contents_params[3]
+            %td= app.adv_warning
+    = submit_tag "下一步", :class => "btn btn-primary"
+    = link_to '返回', :back, class: 'btn btn-primary'

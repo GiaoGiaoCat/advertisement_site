@@ -1,0 +1,48 @@
+%aside#sidebar
+  .side-options
+    %ul
+      %li= link_to content_tag(:i, nil, class: 'icon16 i-arrow-left-7'), '#', class: 'act act-primary tip', id: 'collapse-nav', title: 'Collapse navigation'
+  .sidebar-wrapper
+    %nav#mainnav
+      %ul.nav.nav-list
+        = side_nav_with_li("首页", 'i-home-4', manage_welcome_path)
+        - params_for_developer = {admin: false}
+        = render 'layouts/admin_sidebar'
+        - if current_user.role?(:developer) || current_user.role?(:spreader)
+          %li{class: nav_class_with_urls([manage_applications_path(params_for_developer), manage_pages_download_path, manage_charts_daily_view_path, manage_charts_channel_view_path(params_for_developer)])}
+            = side_nav_without_li("应用相关", 'i-rocket', '#')
+            %ul.sub
+              - if current_user.role?(:developer)
+                = side_nav_with_li("应用管理", 'i-rocket', manage_applications_path(params_for_developer))
+                = side_nav_with_li("SDK下载", 'i-download-5', manage_pages_download_path)
+                = side_nav_with_li("统计报表", 'i-stats-up', manage_charts_daily_view_path)
+              - if current_user.role?(:spreader)
+                = side_nav_with_li("渠道数据统计", 'i-bars', manage_charts_channel_view_path(params_for_developer))
+        - if current_user.role?(:developer)
+          %li{class: nav_class_with_urls([manage_charts_income_view_path, manage_payments_path(params_for_developer), new_manage_payment_path])}
+            = side_nav_without_li("财务相关", 'i-coins', '#')
+            %ul.sub
+              = side_nav_with_li("收入明细", 'i-bars', manage_charts_income_view_path)
+              = side_nav_with_li("提现明细", 'i-bars', manage_payments_path(params_for_developer))
+              = side_nav_with_li("我要提现", 'i-credit', new_manage_payment_path)
+          %li{class: nav_class_with_urls([edit_user_registration_path, new_manage_profile_path, (manage_profile_path(current_user.profile) rescue '')])}
+            = side_nav_without_li("帐号相关", 'i-user-6', '#')
+            %ul.sub
+              - if current_user.profile
+                = side_nav_with_li("帐号信息", 'i-profile', manage_profile_path(current_user.profile))
+              - else
+                = side_nav_with_li("帐号验证", 'i-profile', new_manage_profile_path)
+              = side_nav_with_li("修改密码", 'i-cog-3', edit_user_registration_path)
+          = side_nav_with_li("帮助和支持", 'i-question-3', manage_faq_path)
+        - if current_user.role?(:secretary)
+          %li{class: nav_class_with_urls([manage_adv_contents_path, list_manage_applications_path], true)}
+            = side_nav_without_li("广告推广", 'i-tree-5', '#')
+        - if current_user.role?(:finance)
+          %li{class: nav_class_with_urls([manage_adv_contents_path, list_manage_applications_path], true)}
+            = side_nav_without_li("广告推广", 'i-tree-5', '#')
+            %ul.sub
+              - account_bill_count = AccountBill.notify_for_finance.count
+              -if account_bill_count > 0
+                = side_nav_with_li("账单管理", 'i-stats-2', manage_account_bills_path, account_bill_count)
+              -else
+                = side_nav_with_li("账单管理", 'i-stats-2', manage_account_bills_path)

@@ -1,0 +1,19 @@
+%br
+%p 汇总信息
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 账单创建等待对账
+      %th 对账完毕等待付款-不需发票
+      %th 对账完毕等待付款-需付发票
+      %th 对账完毕等待付款-已付发票
+      %th 确认已付款到帐
+      %th 合作停止欠结余款
+  %tbody
+    %tr
+      %td.center=AccountBill::state_sum_range_days(params[:begin], params[:end], AccountBill::UN_CHECKED)
+      %td.center=AccountBill::state_sum_range_days(params[:begin], params[:end], AccountBill::CHECKED_NO_NEED_INVOICE)
+      %td.center=AccountBill::state_sum_range_days(params[:begin], params[:end], AccountBill::CHECKED_NEED_INVOICE)
+      %td.center= AccountBill::state_sum_range_days(params[:begin], params[:end], AccountBill::CHECKED_INVOICED)
+      %td.center= AccountBill::state_sum_range_days(params[:begin], params[:end], AccountBill::PAYED)
+      %td.center= AccountBill::state_sum_range_days(params[:begin], params[:end], AccountBill::STOP_WAIT_TO_PAY)

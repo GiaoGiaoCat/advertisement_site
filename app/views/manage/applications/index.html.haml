@@ -1,0 +1,63 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        自有应用管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 应用列表
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 应用列表'
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(manage_applications_path, method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+%p 注解：背景颜色中黄色为有广告预警， 蓝色为应用开启广告
+- if current_user.role?(:admin)
+  %table#sortDataTable.table.table-striped.table-bordered{style: "font-size:12px;"}
+    %thead
+      %tr
+        %th App Name
+        %th 展示
+        %th 下载完成
+        %th 安装提示
+        %th 安装完成
+        %th 无广告报警
+        %th 广告列表
+        %th Action
+    %tbody
+      - @applications.each do |app|
+        %tr{class: draw_color_for_app(app)}
+          %td= app.name
+          %td.center
+            = app.adv_contents_params[0]
+          %td.center
+            = app.adv_contents_params[1]
+          %td= app.adv_contents_params[2]
+          %td= app.adv_contents_params[3]
+          %td= app.adv_warning
+          %td= app.adv_contents_to_label
+          %td.center.vcenter
+            .btn-group
+              = link_to content_tag(:i, nil, class:'icon12 i-pencil') + '编辑', edit_manage_application_path(app), class: 'btn btn-mini'
+              = link_to content_tag(:i, nil, class:'icon12 i-pencil') + '渠道管理', adv_settings_manage_application_path(app), class: 'btn btn-mini'
+              = link_to content_tag(:i, nil, class:'icon12 i-pencil') + '  广告详情  ', adv_contents_manage_application_path(app), class: 'btn btn-mini'
+= link_to '创建新应用', new_manage_application_path, class: 'btn btn-primary'

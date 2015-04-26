@@ -1,0 +1,39 @@
+# encoding: utf-8
+class Profile < ActiveRecord::Base
+  # extends ...................................................................
+  # includes ..................................................................
+  # security (i.e. attr_accessible) ...........................................
+  # relationships .............................................................
+  belongs_to :user
+  # validations ...............................................................
+  validates :user_id, :presence => true, :uniqueness => true
+  validates :type_name, :presence => true
+  validates :name, :presence => true
+  validates :phone, :presence => true, numericality: true
+  validates :qq, numericality: true, :unless => Proc.new { |profile| profile.qq.blank? }
+  validates :identity_card, :presence => true, numericality: true
+  validates :bank, :presence => true, :presence => true
+  validates :bank_address, :presence => true
+  validates :bank_account, :presence => true, numericality: true
+  validates :bank_account_name, :presence => true
+
+  # callbacks .................................................................
+  # scopes ....................................................................
+  # additional config ..................................................
+  encrypted_id key: 'auBxsxQMqDzXjUxC'
+
+  TYPES = [["个人", "individual"], ["企业", "company"]]
+  BANKS = ["招商银行", "工商银行"]
+
+  after_initialize :set_default_value, if: 'new_record?'
+  # class methods .............................................................
+  # public instance methods ...................................................
+  # protected instance methods ................................................
+  # private instance methods ..................................................
+  private
+
+  def set_default_value
+    self.type_name ||= "individual"
+    self.amount ||= 0
+  end
+end

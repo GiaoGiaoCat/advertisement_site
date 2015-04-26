@@ -1,0 +1,23 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        广告
+        = content_tag(:span, '/', class: 'divider')
+      %li.active  下线广告管理
+
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr{style: "font-size: 12px;"}
+      %th ID
+      %th 内部标签
+      %th 标题
+      %th 日安装控量
+      %th 单价
+      %th 用户
+      %th 操作
+  %tbody
+    = render @adv_contents
+.btn-group
+  = link_to '返回', manage_adv_contents_path, class: 'btn btn-primary'

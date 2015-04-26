@@ -1,0 +1,52 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        平台管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告展示
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-users-2') + ' 广告展示'
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(adv_contents_manage_platform_path(@platform), method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+- if current_user.role?(:admin)
+  %table#sortDataTable.table.table-striped.table-bordered{style: "font-size:12px;"}
+    %thead
+      %tr
+        %th 广告名称
+        %th 安装数
+        %th 帐号及花费列表
+        %th 汇总
+    %tbody
+      - @adv_contents.each do |adv_content|
+        - array = @platform.accounts_balances_with_date_to_label(params[:begin], params[:end], adv_content.id)
+        %tr
+          %td= adv_content.tag
+          %td.center
+            = adv_content.platform_adv_statistics_sum(params[:begin], params[:end])
+          %td.center
+            =array[0]
+          %td.center
+            =array[1]
+= link_to '返回', manage_platforms_path(), class: 'btn btn-primary'

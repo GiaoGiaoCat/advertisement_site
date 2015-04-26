@@ -1,0 +1,40 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 渠道规则管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-lab') + ' 渠道规则管理'
+
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 规则名称
+      %th 参数
+      %th 起效时间
+      %th 创建时间
+      %th
+  %tbody
+    - @rules.each do |rule|
+      %tr
+        %td= rule.name
+        %td.center= rule.ratio
+        %td.center= rule.activate_at
+        %td.center= rule.created_at.to_date
+        %td.center.vcenter
+          .btn-group
+            = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 编辑', edit_manage_channel_rule_path(@channel, rule), class: 'btn btn-mini'
+.row-fluid
+  .span4
+    #dataTable_info.dataTables_info
+      = page_entries_info @rules
+  .span8
+    .dataTables_paginate.paging_bootstrap.pagination
+      = paginate @rules
+
+= link_to '创建新规则', new_manage_channel_rule_path(@channel), class: 'btn btn-primary'

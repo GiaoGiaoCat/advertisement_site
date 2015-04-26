@@ -1,0 +1,22 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        推广物料配置相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告推广详情
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil) + '广告推广详情'
+.container
+  %p
+    = "标题" + @adv_content.tag
+  %p
+    = "单价" + @adv_content.price.to_s
+  %p
+    = "描述" +  @adv_content.description
+  %p
+    = "计划投放次数" +  @adv_content.plan_view_count.to_s
+=link_to "返回", manage_adv_contents_path, class: 'btn , btn-primary'

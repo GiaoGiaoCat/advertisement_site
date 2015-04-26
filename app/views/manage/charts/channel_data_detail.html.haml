@@ -1,0 +1,106 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        应用相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 渠道数据统计
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-bars') + ' 渠道数据统计'
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索结果
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(manage_charts_channel_data_detail_path, method: :get) do
+            = hidden_field_tag 'channel_id', @channel.to_param
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "查询", class: 'btn btn-primary'
+              = link_to content_tag(:i, nil, class:'icon14 i-lab') + "修改扣量规则", manage_channel_rules_path(@channel), class: 'btn', target: '_blank'
+
+        .dataTables_length
+          .controls.controls-row
+            %table.table.table-hover
+              %thead
+                %tr
+                  %td 渠道名
+                  %td 开始日期
+                  %td 结束日期
+                  %td Recovery
+                  %td 发货率
+                  %td 单价
+                  %td 结算用户数
+                  %td 总计
+                  %td 扣量规则(日期 参数)
+              %tbody
+                %tr
+                  %td.vcenter= @channel.name
+                  %td.vcenter= params[:begin]
+                  %td.vcenter= params[:end]
+                  %td.vcenter
+                    = recovery_by_channel(@channel, @channel.price, params[:begin], params[:end])
+                  %td.vcenter
+                    = shipped_orders_rate_by_channel(@channel, params[:begin], params[:end])
+                  %td.vcenter= number_to_currency @channel.price, unit: "￥"
+                  %td.vcenter
+                    = calculate_device_by_channel_for_spreader(@channel, params[:begin], params[:end])
+                  %td.vcenter
+                    - devices = calculate_expenses_by_channel(@channel, params[:begin], params[:end])
+                    = number_to_currency @channel.price * devices, unit: "￥"
+                  %td.vcenter
+                    = show_channel_rules(@channel.rules)
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 统计报表管理员视图
+      #channel_view.widget-content
+        #dataTable_length.dataTables_length
+          .controls.controls-row
+        - if @devices || @orders
+          = render "success_notification"
+          = content_tag(:div, nil, data: { "channel-devices" => @devices.to_json, "channel-orders" => @orders.to_json, "completed-orders" => @completed_orders.to_json, "shipped_orders" => @shipped_orders.to_json }, id: "data_holder")
+          - if @devices && !@devices.size.zero?
+            #channel_devices_holder
+          - if @orders && !@orders.size.zero?
+            #channel_orders_holder
+          - if @devices.size.zero? && (@order.blank? || @orders.size.zero?)
+            .alert
+              %string
+                %i.icon24.i-warning
+                抱歉！
+              暂时没有用户数据或订单数据。
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 统计报表用户视图
+      .widget-content
+        .dataTables_length
+          .controls.controls-row
+        - if @devices_for_spreader
+          = content_tag(:div, nil, data: { "channel-devices" => @devices_for_spreader.to_json }, id: "data_holder_spreader")
+          - if @devices_for_spreader && !@devices_for_spreader.size.zero?
+            #channel_devices_holder_spreader

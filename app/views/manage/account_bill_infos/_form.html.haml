@@ -1,0 +1,29 @@
+.container
+  = simple_form_for [:manage, @account_bill,  @account_bill_info] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      -if current_user.role?(:admin)
+        = f.association :adv_content, collection: AdvContent.all.map{|content| [content.tag, content.id]}, label: '广告', input_html: {id: "account_bill_adv_content"}
+      -else
+        = f.association :adv_content, collection: current_user.adv_contents.all.map{|content| [content.tag, content.id]}, label: '广告', input_html: {id: "account_bill_adv_content"}
+      .control-group.datetime.optional.rule_activate_at
+        %label.datetime.optional.control-label
+          开始时间
+        .controls.controls-row
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = f.text_field :start_date, size: 16, required: true
+            %span.add-on
+              %i.icon16.i-calendar-4
+      .control-group.datetime.optional.rule_activate_at
+        %label.datetime.optional.control-label
+          结束时间
+        .controls.controls-row
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = f.text_field :end_date, size: 16, required: true, input_html:{id: "account_bill_end_time" }
+            %span.add-on
+              %i.icon16.i-calendar-4
+      = f.input :price, label: "单价", input_html:{id: "adv_content_price"}, required: true
+      = f.input :amount, label: "数量", input_html:{id: "adv_content_install_count"}, required: true
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'
+      = link_to '取消', :back, class: 'btn'

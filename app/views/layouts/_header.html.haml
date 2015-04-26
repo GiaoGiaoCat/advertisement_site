@@ -1,0 +1,31 @@
+%header#header.navbar.navbar-inverse.navbar-fixed-top
+  .navbar-inner
+    .container-fluid
+      = link_to image_tag("new_logo.png", alt: "Genyx admin"), "/", class: 'brand'
+      .nav-no-collapse
+        #top-search
+        %ul.nav.pull-right
+          %li.divider-vertical
+          %li
+            %span.coin_box
+              = content_tag(:i, nil, class: 'icon24 i-coin')
+              = content_tag(:span, "帐户余额：" + number_to_currency(current_user.amount, unit: "", separator: ".") + " 元", class: 'notification red')
+
+          / %li.dropdown
+          /   = link_to content_tag(:i, nil, class: 'icon24 i-coin') + content_tag(:span, "帐户余额：1000.00 元", class: 'notification red'), "#", class: 'dropdown-toggle', "data-toggle" => "dropdown"
+          /   %ul.dropdown-menu.messages
+          /     %li= link_to content_tag(:i, nil, class: 'icon16 i-credit') + "我要提现", '#'
+          /     %li.foot= link_to "我要提现", "#"
+
+
+          %li.divider-vertical
+          %li.dropdown.user
+            = link_to image_tag(show_user_avatar) + content_tag(:span, content_tag(:i, nil, class: 'icon16 i-arrow-down-2'), class: 'more'), "javascript:void(0)", class: 'dropdown-toggle avatar', "data-toggle" => "dropdown"
+            %ul.dropdown-menu
+              - if current_user.profile
+                %li= link_to content_tag(:i, nil, class: 'icon16 i-profile') + "帐号信息", manage_profile_path(current_user.profile)
+              - else
+                %li= link_to content_tag(:i, nil, class: 'icon16 i-profile') + "帐号验证", new_manage_profile_path
+              %li= link_to content_tag(:i, nil, class: 'icon16 i-cog-3') + "修改密码", edit_user_registration_path
+              %li= link_to content_tag(:i, nil, class: 'icon16 i-exit') + "退出登录", destroy_user_session_path, method: :delete
+          %li.divider-vertical

@@ -1,0 +1,78 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= content_tag(:i, nil, class: 'icon16 i-home-4') + "首页"
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-home-4') + ' 首页'
+
+.row-fluid
+  .widget
+    .widget-content
+      .page-header
+        %h4 简单 4 步，让你的应用开始赚钱
+      .wizard-steps.show
+        .wstep.current
+          .donut
+            %i.icon24.i-rocket
+          %span.title 添加应用
+          %span.txt 添加应用基础信息，获得API KEY
+        .wstep.current
+          .donut
+            %i.icon24.i-download-5
+          %span.title 下载SDK
+          %span.txt 下载广告SDK，并嵌入到应用中
+        .wstep.current
+          .donut
+            %i.icon24.i-cloud-upload
+          %span.title 上传应用
+          %span.txt 上传已嵌入SDK的应用并通过审核
+        .wstep.current
+          .donut
+            %i.icon24.i-coin
+          %span.title 获得佣金
+          %span.txt 完善个人资料后开始赚取佣金
+      .banner
+        = raw "爱火移动广告平台凭借独创的#{content_tag(:span, '订单分成模式', class: 'red')}，#{content_tag(:span, '每笔订单提成10%', class: 'red')}。#{content_tag(:span, '实时结算', class: 'red')}。结合优秀的广告资源，以稳定安全的广告形式，助开发者轻松盈利。精准的投放策略，最大化锁定有效客户。我们统计系统，让你对自己的收入情况了如指掌，拒绝任何扣量。"
+.row-fluid
+  .widget
+    .widget-title
+      .icon
+        %i.icon20.i-stats
+      %h4 7天内订单数量
+    .widget-content
+      .row-fluid
+        = content_tag(:div, nil, data: { "total-orders" => @total_orders.to_json, "completed-orders" => @completed_orders.to_json }, id: "month_count_holder", class: 'chart')
+.row-fluid
+  .span8
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-bullhorn
+        %h4 公告
+      .widget-content
+        .row-fluid
+          .notice_news
+            %ul
+              - date = Time.now()
+              - while date > 45.days.ago(Time.now())
+                - date = date.yesterday
+                - if date.strftime("%u") == "5"
+                  %li
+                    %span.title= "爱火联盟无线广告#{date.yesterday.strftime('%m月%d日')}佣金结算已支付！"
+                    %span.date= date.strftime('%Y-%m-%d')
+
+  .span4
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-fire-2
+        %h4 热门广告资源
+      .widget-content
+        .pop_res
+          %ul.clearfix
+            %li
+              = image_tag("sq_logo.jpg")
+              %span.title 首趣商城
+              %span 按成交价格提成10%，比淘宝客利润高10倍数以上。

@@ -1,0 +1,81 @@
+-cache(params.to_s, expires_in: 1800) do
+  = content_for(:crumb) do
+    .crumb
+      %ul.breadcrumb
+        %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+        %li
+          应用相关
+          = content_tag(:span, '/', class: 'divider')
+        %li.active 渠道数据统计
+
+  = content_for(:heading) do
+    #heading.page-header
+      %h1= content_tag(:i, nil, class: 'icon20 i-bars') + ' 渠道数据统计'
+
+  .row-fluid
+    .span12
+      .widget
+        .widget-title
+          .icon
+            %i.icon20.i-table
+          %h4 搜索结果
+        .widget-content
+          #channel-detail-search-wrap.controls.controls-row
+            = form_tag(manage_charts_channel_data_path, method: :get) do
+              .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+                = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+                %span.add-on
+                  %i.icon16.i-calendar-4
+              .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+                = text_field_tag "end", params[:end], size: 16, class: 'span9'
+                %span.add-on
+                  %i.icon16.i-calendar-4
+              .input-append
+                = select_tag "level", options_for_select(%w(1 2 3 4), params[:level]), prompt: "选择级别"
+              .inline_submit
+                = submit_tag "查询", class: 'btn btn-primary'
+
+  .row-fluid
+    - devices_total = 0; shipped_orders_total = 0;
+    #channel_data.span12
+      %table.table.table-hover
+        %thead
+          %tr
+            %td.span2 渠道名
+            %td.span2 级别
+            %td Recovery
+            %td 发货率
+            %td 发货订单
+            %td 支出
+            %td 收入
+            %td
+        %tbody
+          - @channels.each do |channel|
+            %tr
+              %td.vcenter= channel.name
+              %td.vcenter= channel.level
+              %td.vcenter
+                = highliht_recovery recovery_by_channel(channel, channel.price, params[:begin], params[:end])
+              %td.vcenter= shipped_orders_rate_by_channel(channel, params[:begin], params[:end])
+              %td.vcenter= calculate_shipped_orders_by_channel(channel, params[:begin], params[:end])
+              %td.vcenter
+                - devices = calculate_expenses_by_channel(channel, params[:begin], params[:end])
+                - devices_total += (channel.price || 0) * devices
+                = number_to_currency (channel.price || 0) * devices, unit: "￥"
+              %td.vcenter
+                - shipped_orders = calculate_revenues_by_channel(channel, params[:begin], params[:end])
+                - shipped_orders_total += shipped_orders
+                = number_to_currency 60 * shipped_orders, unit: "￥"
+              %td.center.vcenter
+                = link_to "查看详情", manage_charts_channel_data_detail_path(channel_id: channel.to_param, begin: params[:begin], end: params[:end], commit: 'search'), class: 'btn btn-primary', target: '_blank'
+          %tr
+            %th.right 总计
+            %td
+            %td
+            %td
+            %td.vcenter= shipped_orders_total
+            %td.vcenter
+              = number_to_currency devices_total, unit: "￥"
+            %td.vcenter
+              = number_to_currency 60 * shipped_orders_total, unit: "￥"
+            %td.vcenter

@@ -1,0 +1,2 @@
+module Manage::RulesHelper
+end

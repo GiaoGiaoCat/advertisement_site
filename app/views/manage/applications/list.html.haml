@@ -1,0 +1,64 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 应用推广统计
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 应用推广统计'
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(list_manage_applications_path, method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 应用名称
+      %th 无广告报警
+      %th 关联广告
+      %th 展示次数
+      %th 点击次数
+      %th 安装次数
+      %th
+  %tbody
+    - @applications.each do |application|
+      %tr
+        %td= application.name
+        %td.center= application.reports.between(params[:begin], params[:end]).sum(:warning_count) || 0
+        %td.center= application.adv_contents.count
+        %td.center= application.statistics.between(params[:begin], params[:end]).sum(:view_count)
+        %td.center= application.statistics.between(params[:begin], params[:end]).sum(:click_count)
+        %td.center= application.statistics.between(params[:begin], params[:end]).sum(:install_count)
+        %td.center.vcenter
+          .btn-group
+            = link_to content_tag(:i, nil, class:'icon12 i-eye') + ' 详情', charts_manage_application_path(application), class: 'btn btn-mini'
+            = link_to content_tag(:i, nil, class:'icon12 i-eye') + ' 查看广告数据', adv_contents_manage_application_path(application), class: 'btn btn-mini'
+.row-fluid
+  .span4
+    #dataTable_info.dataTables_info
+      = page_entries_info @applications
+  .span8
+    .dataTables_paginate.paging_bootstrap.pagination
+      = paginate @applications

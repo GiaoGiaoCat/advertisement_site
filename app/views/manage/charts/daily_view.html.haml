@@ -1,0 +1,51 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        应用相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 统计报表
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1
+      = content_tag(:i, nil, class: 'icon20 i-stats-up') + ' 统计报表'
+
+
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 统计报表
+      .widget-content
+        #dataTable_length.dataTables_length
+          .controls.controls-row
+            = form_tag(manage_charts_daily_view_path, class: 'form-horizontal', method: :get)
+            .inline_select
+              = select_tag "app", options_for_select(current_user.applications.collect { |app| [app.name, app.to_param] }, selected: params[:app]), :style => "width: 120px;"
+
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "查询", class: 'btn btn-primary'
+        - if @total_orders && @completed_orders
+          = content_tag(:div, nil, data: { "total-orders" => @total_orders.to_json, "completed-orders" => @completed_orders.to_json }, id: "data_holder")
+          - unless @total_orders.size.zero?
+            #count_holder
+          - unless @completed_orders.size.zero?
+            #money_holder
+          - if @total_orders.size.zero? && @completed_orders.size.zero?
+            .alert
+              %string
+                %i.icon24.i-warning
+                抱歉！
+              暂时没有订单数据或成交订单数据。

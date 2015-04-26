@@ -1,0 +1,16 @@
+%table.table.table-hover
+  %thead
+    %tr
+      %th.span2 渠道
+      %th.span2 产品
+      %th.span2 操作
+  %tbody
+    - @adv_settings.each do |adv_setting|
+      %tr{class: ("success" if adv_setting.activity)}
+        %td= adv_setting.channel
+        %td= adv_setting.application.name
+        %td
+          = active_setting_manage_adv_setting_path(adv_setting)
+          = link_to '编辑', edit_manage_adv_setting_path(adv_setting), class: 'btn btn-mini btn-primary'
+          = link_to '删除', manage_adv_setting_path(adv_setting), method: :delete, remote: true, class: 'btn btn-mini btn-danger', confirm: "确认删除?"
+=paginate @adv_settings

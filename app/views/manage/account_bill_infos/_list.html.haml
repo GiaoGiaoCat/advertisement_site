@@ -1,0 +1,46 @@
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 广告名称
+      %th 开始时间
+      %th 结束时间
+      %th 单价
+      %th 安装量
+      %th 金额
+      %th 操作
+  %tbody
+    -@account_bill_infos.each do |account_bill_info|
+      %tr
+        %td.center= account_bill_info.adv_content.tag
+        %td.center= account_bill_info.start_date
+        %td.center= account_bill_info.end_date
+        %td.center= account_bill_info.price.to_f
+        %td.center= account_bill_info.amount
+        %td.center= account_bill_info.price.to_f * account_bill_info.amount
+        %td.center
+          -if current_user.role?(:channel_manager)
+            -if @account_bill.unchecked?
+              =link_to "编辑", edit_manage_account_bill_account_bill_info_path(@account_bill, account_bill_info), class: "btn btn-warning"
+              =link_to "删除", manage_account_bill_account_bill_info_path(@account_bill, account_bill_info), class: "btn btn-warning", method: :delete
+%br
+%p 统计汇总
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th 单价
+      %th 安装量
+      %th 金额
+  %tbody
+    %tr
+      %td.center= (@account_bill.balance.to_f / @account_bill.amount.to_f).round(2)
+      %td.center= @account_bill.amount
+      %td.center= @account_bill.balance
+
+-if @account_bill.pay_money_pic.url
+  %p=image_tag(@account_bill.pay_money_pic, size: '200')
+-else
+  %p 暂无图片信息
+-if @account_bill.details.url
+  %p=image_tag(@account_bill.details, size: '200')
+-else
+  %p 暂无图片信息

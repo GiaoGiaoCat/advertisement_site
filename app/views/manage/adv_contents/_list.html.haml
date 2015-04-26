@@ -1,0 +1,133 @@
+-view_count_total = 0; click_count_total = 0; install_count_total = 0;read_count_total = 0;
+-every_view_income = 0; every_click_income = 0; income_total = 0;plant_view_total = 0;
+-read_view = 0.0; view_click = 0.0; click_install = 0.0; cp_activity = 0;
+%p 注解：关闭广告将删除广告关联的所有策略。 激活请选择推广渠道配置
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr{style: "font-size: 12px;"}
+      %th ID
+      %th 广告
+      %th 日控量
+      %th 展示
+      %th 下载完成
+      %th 安装提示
+      -if current_user.role?(:admin)
+        %th{style: "width: 100px"} 安装完成/应用/平台
+        %th 安装完成
+      -else
+        %th 安装完成
+      %th cp 激活数
+      %th 效果安装比
+      %th 收入
+      %th 单次展示收入
+      %th 单次下载收入
+      %th 展-下
+      %th 下-提
+      %th 提-安
+      %th 动作
+  %tbody
+    - @adv_contents.each do |ad_content|
+      %tr{class: if (current_user.role?(:admin) || ad_content.user == current_user) && ad_content.should_have_cp_report?(params[:begin], params[:end]) then "warning" end }
+        %td= ad_content.id
+        %td
+          - if ad_content.tag.blank?
+            = ad_content.title
+          - else
+            = ad_content.tag
+        -if current_user.role?(:admin) || ad_content.user ==  current_user
+          %td.center
+            =ad_content.plan_view_count
+            - plant_view_total += ad_content.plan_view_count
+          %td.center
+            =ad_content.relate_params[0]
+            - read_count_total += ad_content.relate_params[0]
+          %td.center
+            =ad_content.relate_params[1]
+            - view_count_total += ad_content.relate_params[1]
+          %td.center
+            = ad_content.relate_params[2]
+            - click_count_total += ad_content.relate_params[2]
+          %td.center
+            -if  current_user.role?(:admin)
+              = "#{ad_content.total_install_count}/#{ad_content.relate_params[3]}/#{ad_content.total_install_count - ad_content.relate_params[3]}"
+              %td.center
+                = ad_content.total_install_count
+            -else
+              = "#{ad_content.total_install_count}"
+            -install_count_total += ad_content.total_install_count
+          %td
+            - adv_content_ap_activity = ad_content.cp_report_num(params[:begin], params[:end])
+            - cp_activity += adv_content_ap_activity
+            = adv_content_ap_activity
+          %td
+            = (adv_content_ap_activity / ad_content.total_install_count.to_f).round(2)
+          %td
+            = adv_content_ap_activity * ad_content.price.to_f.round(2)
+            - income_total += adv_content_ap_activity * ad_content.price.to_f
+          %td.center
+            = compute_income_relate(ad_content.income, ad_content.relate_params[0])
+            - every_view_income += compute_income_relate(ad_content.income, ad_content.relate_params[0])
+          %td.center
+            = compute_income_relate(ad_content.income, ad_content.relate_params[1])
+            - every_click_income += compute_income_relate(ad_content.income, ad_content.relate_params[1])
+          %td
+            = compute_income_relate( ad_content.relate_params[1], ad_content.relate_params[0])
+            - read_view  += compute_income_relate( ad_content.relate_params[1], ad_content.relate_params[0])
+          %td
+            = compute_income_relate(ad_content.relate_params[2], ad_content.relate_params[1])
+            - view_click += compute_income_relate(ad_content.relate_params[2], ad_content.relate_params[1])
+          %td
+            = compute_income_relate(ad_content.relate_params[3], ad_content.relate_params[2])
+            - click_install +=  compute_income_relate(ad_content.relate_params[3], ad_content.relate_params[2])
+          %td.center.vcenter
+            = is_adv_content_activity?(ad_content)
+            %br
+            = link_to_with_date content_tag(:i, nil) + '激活录入', manage_adv_content_adv_advertiser_reports_path(ad_content), class: 'btn btn-mini'
+            %br
+            = link_to_with_date content_tag(:i, nil) + '推广渠道', applications_manage_adv_content_path(ad_content), class: 'btn btn-mini'
+            .btn-group
+              = link_to ("广告相关" + content_tag(:span, nil, :class => "caret")).html_safe, "#", :class => "btn btn-mini dropdown-toggle", "data-toggle" => "dropdown"
+              %ul.dropdown-menu
+                %li= link_to content_tag(:i, nil) + '控量计划', plant_manage_adv_content_path(ad_content), target: "_blank"
+                %li= link_to content_tag(:i, nil) + ' 编辑', edit_manage_adv_content_path(ad_content)
+                - if current_user.role?(:admin)
+                  -state_operate_able(ad_content).each do |item|
+                    %li= item
+        -else
+          -13.times do |infer|
+            %td
+              =nil
+          %td.center.vcenter
+            .btn-group
+              = link_to content_tag(:i, nil) + '激活录入', manage_adv_content_adv_advertiser_reports_path(ad_content), class: 'btn btn-mini'
+%table#sortDataTable.table.table-striped.table-bordered
+  %thead
+    %tr{style: "font-size: 12px;"}
+      %th 广告
+      %th 计划安装
+      %th 展示
+      %th 下载完成
+      %th 安装提示
+      %th 安装完成
+      %th cp 激活数
+      %th  预计收入
+      %th 单次展示收入
+      %th 单次下载收入
+      %th 展-下
+      %th 下-提
+      %th 提-安
+  %tbody
+    %tr
+      %td 统计
+      %td=plant_view_total
+      %td.center= read_count_total
+      %td.center= view_count_total
+      %td.center= click_count_total
+      %td.center= install_count_total
+      %td= cp_activity
+      %td= income_total.round(3)
+      %td.center= compute_income_relate(every_view_income, @adv_contents.size)
+      %td.center= compute_income_relate(every_click_income, @adv_contents.size)
+      %td= (read_view / @adv_contents.size).round(3)
+      %td= (view_click / @adv_contents.size).round(3)
+      %td= (click_install / @adv_contents.size).round(3)

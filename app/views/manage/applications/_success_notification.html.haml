@@ -1,0 +1,11 @@
+.alert.alert-success
+  %button.close{'data-dismiss' => 'alert', type: 'button'} ×
+  %strong
+    %i.icon24.i-checkmark-circle
+    搜索成功
+    - text = "从 #{params[:begin]} 到 #{params[:end]} 共有"
+    - text += display_sum_count(@adv_statistics, :view)
+    - text += display_sum_count(@adv_statistics, :click)
+    - text += display_sum_count(@adv_statistics, :install, "。")
+
+    = text

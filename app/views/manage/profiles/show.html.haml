@@ -1,0 +1,35 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        帐号相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 帐号信息
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-profile') + ' 帐号信息'
+
+- if @profile
+  %table.table.table-bordered
+    %tr
+      %th 帐号类型
+      %td= show_profile_type_name(@profile.type_name)
+    = show_cell(@profile, "name", {label: show_profile_label_by_type(@profile.type_name, :name)})
+    = show_cell(@profile, "phone", {label: "电话号码"})
+    = show_cell(@profile, "qq", {label: "QQ号码"})
+    = show_cell(@profile, "identity_card", {label: show_profile_label_by_type(@profile.type_name, :identity_card)})
+    = show_cell(@profile, "bank", {label: "银行"})
+    = show_cell(@profile, "bank_address", {label: "开户行地址"})
+    = show_cell(@profile, "bank_account", {label: "银行账号"})
+    = show_cell(@profile, "bank_account_name", {label: show_profile_label_by_type(@profile.type_name, :bank_account_name)})
+- else
+  .alert
+    %string
+      %i.icon24.i-warning
+      抱歉！
+    您还没有完善自己的个人资料。
+
+.button_wrap
+  = link_to content_tag(:i, nil, class:'icon12 i-arrow-left') + ' 返回', :back, class: 'btn'

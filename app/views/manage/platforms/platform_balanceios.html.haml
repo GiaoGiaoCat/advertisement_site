@@ -1,0 +1,36 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        平台管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 花费录入
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-rocket') + "#{@platform.name}/花费录入"
+
+.widget
+  .widget-title
+    .icon
+      %i.icon20.i-stack-checkmark
+    %h4 花费录入创建
+
+  .widget-content
+    = simple_form_for @platform_balanceio, url:  manage_platform_platform_balanceio_balanceio_path(@platform), :html => { :class => 'form-horizontal' } do |f|
+      = f.association :adv_content, collection: AdvContent.where(id: @platform.adv_content_ids).map {|item| [item.tag, item.id]}, as: :select, :label => "广告名称"
+      = f.association :platform_account, collection: @platform.platform_accounts.map {|item| [item.account_name, item.id]}, as: :select, :label => "帐号", required: true
+      = f.input :money, :label => "花费"
+      .control-group.datetime.optional.rule_activate_at
+        %label.datetime.optional.control-label
+          时间
+        .controls.controls-row
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = f.text_field :report_date, size: 16, required: true
+            %span.add-on
+              %i.icon16.i-calendar-4
+      .form-actions
+        = f.button :submit, "保存", :class => 'btn btn-primary'
+        = link_to '取消', :back, :class => 'btn'
+        = link_to ' 删除', manage_platform_path(@platform), method: :delete, class: 'btn btn-danger'

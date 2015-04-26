@@ -1,0 +1,31 @@
+Axlsx::Package.new do |p|
+  wb = xlsx_package.workbook
+  view_count_total = 0; click_count_total = 0; install_count_total = 0;read_count_total = 0;
+  every_view_income = 0; every_click_income = 0; income_total = 0;plant_view_total = 0;
+  read_view = 0.0; view_click = 0.0; click_install = 0.0; cp_activity = 0;
+   wb.add_worksheet(name: "Buttons") do |sheet|
+    sheet.add_row( ["ID", "广告", "日控量", "展示", "下载完成", "安装提示", "安装完成/应用/平台", "安装完成", "cp激活数", "效果安装比", "收入", "单次展示收入", "单次下载收入", "展-下", "下-提", "提-安"])
+
+      @adv_contents.each do |ad_content|
+        plant_view_total += ad_content.plan_view_count
+        read_count_total += ad_content.relate_params[0]
+        view_count_total += ad_content.relate_params[1]
+        click_count_total += ad_content.relate_params[2]
+        install_count_total += ad_content.total_install_count
+        adv_content_ap_activity = ad_content.cp_report_num(params[:begin], params[:end])
+        cp_activity += adv_content_ap_activity
+        income_total += adv_content_ap_activity * ad_content.price.to_f
+         every_view_income += compute_income_relate(ad_content.income, ad_content.relate_params[0])
+        every_click_income += compute_income_relate(ad_content.income, ad_content.relate_params[1])
+         read_view  += compute_income_relate( ad_content.relate_params[1], ad_content.relate_params[0])
+         view_click += compute_income_relate(ad_content.relate_params[2], ad_content.relate_params[1])
+         click_install +=  compute_income_relate(ad_content.relate_params[3], ad_content.relate_params[2])
+
+          arr = [ad_content.id, ad_content.tag, ad_content.plan_view_count, ad_content.relate_params[0], ad_content.relate_params[1], ad_content.relate_params[2], "#{ad_content.total_install_count}/#{ad_content.relate_params[3]}/#{ad_content.total_install_count - ad_content.relate_params[3]}", ad_content.total_install_count, adv_content_ap_activity, (adv_content_ap_activity / ad_content.total_install_count.to_f).round(2), adv_content_ap_activity * ad_content.price.to_f.round(2), compute_income_relate(ad_content.income, ad_content.relate_params[0]), compute_income_relate(ad_content.income, ad_content.relate_params[1]),compute_income_relate( ad_content.relate_params[1], ad_content.relate_params[0]), compute_income_relate(ad_content.relate_params[2], ad_content.relate_params[1]), compute_income_relate(ad_content.relate_params[3], ad_content.relate_params[2])]
+       sheet.add_row arr
+      end
+       arr  = ["统计","  ", plant_view_total, read_count_total, view_count_total , click_count_total , "  ", install_count_total , cp_activity ," ", income_total.round(3) ,compute_income_relate(every_view_income, @adv_contents.size) , compute_income_relate(every_click_income, @adv_contents.size) , (read_view / @adv_contents.size).round(3) , (view_click / @adv_contents.size).round(3) , (click_install / @adv_contents.size).round(3)]
+      sheet.add_row arr
+    end
+  p.serialize('simple.xlsx')
+end

@@ -1,0 +1,18 @@
+.container
+  .title-and-new
+    %h3= "#{@application.name}/渠道推广配置"
+    .inline-form
+      = link_to "新建", "#advSettingModal", role: "button", "data-toggle" => "modal", :class => 'btn btn-primary'
+  #advsettings-list
+    = render 'list'
+
+#advSettingModal.modal.hide.fade{tabindex: "-1", role: "dialog", "aria-hidden" => "true"}
+  .modal-header
+    %button.close{"data-dismiss" => "modal", "aria-hidden" => "true"}
+      x
+    %h4#myModalLabel 渠道配置
+  .modal-body
+    = simple_form_for [:manage,:adv_setting], :html => { :class => "form-horizontal"} do |f|
+      = f.input :channel, label: '渠道'
+      = f.input :product_name, label: '产品'
+      = f.submit "创建", class: 'btn btn-primary'

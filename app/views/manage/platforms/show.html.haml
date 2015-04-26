@@ -1,0 +1,18 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        推广平台相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 推广平台详情
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil) + '推广平台详情'
+.container
+  %p
+    = "标题" + @platform.id.to_s
+  %p
+    = "单价" + @platform.name
+=link_to "返回", manage_platforms_path, class: 'btn , btn-primary'

@@ -1,0 +1,36 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        账单管理
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 账单编辑
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + " 账单/#{@account_bill.company}"
+.container
+  = simple_form_for [:manage, @account_bill], url: admin_update_manage_account_bill_path(@account_bill),method: :post, :html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :amount, label: ' 安装量'
+      = f.input :company, label: ' 公司'
+      = f.input :balance, label: ' 金额'
+      = f.input :tax, label: '税点'
+      = f.input :state, collection: AccountBill::STATE.to_a, label_method: :first, value_method: :last, label: '状态修改'
+      = f.input :after_tax_balance, label: '税后金额'
+      = f.input :details, hint: "#{@account_bill.details.url ? @account_bill.details.url : '上传图片'}", label: "对账单"
+      = f.input :pay_money_pic, hint: "#{@account_bill.pay_money_pic.url ? @account_bill.pay_money_pic.url : '上传图片'}", label: "打款图"
+    .control-group.datetime.optional.rule_activate_at
+      %label.datetime.optional.control-label
+        到账时间
+      .controls.controls-row
+        .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+          = f.text_field :expect_to_account_date, size: 16, required: true
+          %span.add-on
+            %i.icon16.i-calendar-4
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'
+      = link_to '取消', :back, class: 'btn'
+

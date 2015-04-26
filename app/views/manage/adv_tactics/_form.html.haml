@@ -1,0 +1,10 @@
+.container
+  = simple_form_for [:manage, @adv_setting, @adv_tactic] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :action, collection: AdvTactic::ACTION_TYPES, label: '弹出策略'
+      = f.input :value, label: '值', hint: "弹出策略为广告墙时候数据为推荐顺序"
+      = f.input :notice_type, collection: AdvTactic::NOTICE_TYPES, label: '广告展现方式', hint: '弹出策略是悄悄话的时候，此值无效，默认即可'
+      =f.input :adv_content_ids, collection: AdvContent.activity.all.map {|item| [item.tag, item.id]}, as: :check_boxes, boolean_style: :inline
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'

@@ -1,0 +1,28 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        帐号相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 修改密码
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-cog-3') + ' 修改密码'
+
+.widget
+  .widget-title
+    .icon
+      %i.icon20.i-stack-checkmark
+    %h4 修改密码
+
+  .widget-content
+    = simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => 'form-horizontal' }) do |f|
+      = f.input :current_password, :hint => "为了安全起见，请输入当前密码", :required => true, :label => "当前密码", input_html: { class: 'span12' }
+      = f.input :password, :autocomplete => "off", :required => false, :label => "新密码", input_html: { class: 'span12' }
+      = f.input :password_confirmation, :required => false, :label => "再次输入新密码", input_html: { class: 'span12' }
+
+      .form-actions
+        = f.button :submit, "保存修改", :class => 'btn btn-primary'
+        = link_to '取消', :back, :class => 'btn'

@@ -1,0 +1,21 @@
+%table.table.table-hover
+  %thead
+    %tr
+      %th.span2 弹出策略
+      %th.span2 值
+      %th.span2 广告展现方式
+      %th.span2 管理应用
+      %th
+  %tbody
+    - @adv_tactics[0].each do |adv_tactic|
+      %tr
+        %td= adv_tactic.action
+        %td= adv_tactic.value
+        %td= show_notice_type adv_tactic.notice_type
+        %td= show_adv_content adv_tactic.adv_content_ids
+        adv_tactic.each do
+        %td.center
+          = show_tatics_channel adv_tactic
+        %td
+= link_to '创建新的关联', manage_adv_tactics_path, class: 'btn btn-mini btn-primary'
+= link_to '创建新的策略', new_manage_adv_tactic_path, class: 'btn btn-mini btn-primary'

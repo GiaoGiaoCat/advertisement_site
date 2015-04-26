@@ -1,0 +1,28 @@
+.container
+  = simple_form_for [:manage,@adv_content, @adv_detail] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :cooperation_mode, label: '合作模式', placeholder: "CPA, 换量"
+      = f.input :balance_requirement, label: '结算要求'
+      = f.input :balance_cycle, label: '结算周期', collection: 0..31
+      .control-group.datetime.optional.rule_activate_at
+        %label.datetime.optional.control-label
+          预计首次结算日期
+        .controls.controls-row
+          .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+            = f.text_field :balance_first_date, size: 16, required: true
+            %span.add-on
+              %i.icon16.i-calendar-4
+      = f.input :promotion_requirement, label: '推广要求'
+      = f.input :manage_site, label: '后台地址', hint: '填写登录url'
+      = f.input :manage_site_user, label: '后台帐号'
+      = f.input :manage_site_password, label: '密码', as: :string
+      = f.input :company, label: '公司'
+      = f.input :name, label: '姓名'
+      = f.input :phone, label: '电话'
+      = f.input :qq, label: 'QQ号码'
+      = f.input :postcode, label: '邮编'
+      = f.input :address, label: '地址'
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'
+      = link_to '取消', manage_adv_content_adv_details_path, class: 'btn'

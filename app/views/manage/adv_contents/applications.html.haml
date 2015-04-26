@@ -1,0 +1,138 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        广告推广
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 广告管理
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil) + "#{@adv_content.tag}/推广渠道"
+-self_install_count = 0; platform_install_count = 0;
+-cp_report_num_total = 0;
+-platform_account = 0;
+%p{style: "font-size: 20px"} 广告/应用展示数据
+%p 注解：此页面为推广该广告的应用数据(该广告数据)
+.row-fluid
+  .span12
+    .widget
+      .widget-title
+        .icon
+          %i.icon20.i-table
+        %h4 搜索
+      .widget-content
+        #channel-detail-search-wrap.controls.controls-row
+          = form_tag(applications_manage_adv_content_path(@adv_content), method: :get) do
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "begin", params[:begin], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .datepicker.input-append.date{ "data-date-format" => "yyyy-mm-dd" }
+              = text_field_tag "end", params[:end], size: 16, class: 'span9'
+              %span.add-on
+                %i.icon16.i-calendar-4
+            .inline_submit
+              = submit_tag "搜索", class: 'btn btn-primary'
+
+  -if @infer_applications.size != 0
+    %br
+    %table.table.table-striped.table-bordered{style: "font-size:12px;"}
+      %thead
+        %tr
+          %th App Name
+          %th 展示
+          %th 下载完成
+          %th 安装提示
+          %th 安装完成
+          %th 无广告报警
+          %th 广告列表
+          %th Action
+      %tbody
+        -@infer_applications.each do |app|
+          %tr
+            %td= app.name
+            %td.center
+              = app.adv_contents_params[0]
+            %td.center
+              = app.adv_contents_params[1]
+            %td= app.adv_contents_params[2]
+            %td
+              -self_install_count += app.adv_contents_params[3]
+              = app.adv_contents_params[3]
+            %td= app.adv_warning
+            %td= app.adv_contents_to_label
+            %td.center.vcenter
+              .btn-group
+                = link_to content_tag(:i, nil, class:'icon12 i-pencil') + ' 应用广告详情  ', adv_contents_manage_application_path(app), class: 'btn btn-mini'
+                =link_to "在此应用中去掉广告", del_adv_content_manage_application_path(app, adv_content_id: @adv_content.id), class: "btn btn-mini"
+    -if current_user.role?(:admin)
+      %br
+      %p 平台信息
+      %table.table.table-striped.table-bordered{style: "font-size:12px;"}
+        %thead
+          %tr
+            %th 平台名称
+            %th 安装完成
+            %th 花费
+        %tbody
+          -Platform.platforms_by_adv_content_id(@adv_content.id).each do |platform|
+            %tr
+              %td.center= platform.name
+              %td.center
+                - infer =  platform.platform_statistics_by_adv_content_id_and_time(@adv_content.id, params[:begin], params[:end])
+                = infer
+                - platform_install_count += infer
+              %td.center
+                - infer = platform.platform_accounts_by_time(params[:begin], params[:end], @adv_content.id)
+                -platform_account += infer
+                = infer
+      %br
+      %p 汇总
+      %table.table.table-striped.table-bordered{style: "font-size:12px;"}
+        %thead
+          %tr
+            %th 广告名称
+            %th 安装完成
+            %th cp激活总数
+            %th 花费
+            %th 收入/花费/剩余
+        %tbody
+          %tr
+            %td.center= @adv_content.tag
+            %td.center
+              = "#{self_install_count}/ #{platform_install_count}"
+            %td.center
+              - cp_report_num_total = @adv_content.cp_report_num(params[:begin], params[:end])
+              = cp_report_num_total
+            %td.center
+              = platform_account
+            %td.center
+              = "#{cp_report_num_total * @adv_content.price.to_f}/#{platform_account}/#{cp_report_num_total * @adv_content.price.to_f - platform_account}"
+
+  -else
+    请配置广告渠道
+
+%p
+=link_to "渠道配置",  activity_app_manage_applications_path(adv_content_id: @adv_content.id), class: 'btn btn-primary'
+-if current_user.role?(:admin) && !@adv_content.account_bill_infos.size.zero?
+  %p
+  %h3 账单信息
+  %table.table.table-striped.table-bordered{style: "font-size:12px;"}
+    %thead
+      %tr
+        %th 公司名称
+        %th 账单开始时间
+        %th 账单结束时间
+        %th 实际单价
+        %th 单价
+        %th 安装量
+    %tbody
+      -@adv_content.account_bill_infos.each do |account_bill_info|
+        %tr
+          %td.center= @adv_content.adv_detail.company unless @adv_content.adv_detail.nil?
+          %td.center= account_bill_info.start_date
+          %td.center= account_bill_info.end_date
+          %td.center= @adv_content.price
+          %td.center= account_bill_info.price
+          %td.center= account_bill_info.amount

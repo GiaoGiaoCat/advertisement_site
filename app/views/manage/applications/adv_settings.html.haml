@@ -1,0 +1,35 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 自有应用管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 渠道配置管理'
+    =link_to "新建渠道", new_manage_adv_setting_path(application_id: @application.id), class: 'btn btn-primary'
+.container
+  .title-and-new
+    %h3= "#{@application.name}/渠道推广配置"
+    .inline-form
+  #advsettings-list
+    %div#wrapper-250
+      %ul.accordion
+        -@adv_settings.each do |adv_setting|
+          %li#one.files
+            = link_to adv_setting.channel, manage_adv_setting_adv_tactics_path(adv_setting)
+            %ul.sub-menu
+              -adv_setting.adv_tactics.each do |tactic|
+                %li= link_to tactic.to_label, edit_manage_adv_setting_adv_tactic_path(adv_setting, tactic), remote: true
+              %li= link_to '新建策略', new_manage_adv_setting_adv_tactic_path(adv_setting), remote: true
+              %li= link_to '编辑渠道', edit_manage_adv_setting_path(adv_setting)
+    #edit_adv_tactics
+=link_to "新建渠道", new_manage_adv_setting_path(application_id: @application.id), class: 'btn btn-primary'
+%p
+-unless  (infer = have_default_channel? @adv_settings)
+  =link_to "创建默认渠道", default_channel_manage_adv_settings_path(application_id: @application.id)
+-else
+  =link_to "复制默认渠道规则", copy_channel_manage_application_path(@application, adv_setting_id: @adv_settings[infer].id)

@@ -1,0 +1,9 @@
+.container
+  = simple_form_for [:manage,@adv_setting] ,:html => { :class => "form-horizontal"} do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :channel, lable: "渠道名称"
+      = f.association :application, collection: Application.all.map{|app| [app.name, app.id]}, selected: @application.id
+    .form-actions
+      = f.submit "提交", class: 'btn btn-primary'
+      = link_to '取消', :back, class: 'btn'

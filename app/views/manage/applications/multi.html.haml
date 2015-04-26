@@ -1,0 +1,41 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        管理员相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active 自有应用管理
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-stats-3') + ' 渠道配置管理'
+.container
+  .title-and-new
+.row-fluid
+  = form_tag multi_manage_adv_settings_path(adv_content_id: @adv_content_id), :class => "form-search right span12" do
+    %p
+      = submit_tag "下一步", :class => "btn btn-primary"
+    -@applications.each do |app|
+      -if app.adv_settings.size != 0
+        %p=app.name
+        %br
+          %table.table{style: "font-size:12px;"}
+            %thead
+              %tr
+                %th.center= check_box_tag 'check_all', nil, false, :class => "checkall"
+                %th 渠道名称
+                %th 策略列表
+            %tbody
+              -app.adv_settings.each do |setting|
+                %tr
+                  %td.center= check_box_tag 'ids[]', setting.id
+                  %td= setting.channel
+                  %td
+                    - label = String.new;
+                    -setting.adv_tactics.each do |tactic|
+                      - label << tactic.to_label
+                    = label.blank? ? "空": label
+
+    = submit_tag "下一步", :class => "btn btn-primary"
+    = link_to '返回', :back, class: 'btn btn-primary'

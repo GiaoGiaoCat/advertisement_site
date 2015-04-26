@@ -1,0 +1,31 @@
+= content_for(:crumb) do
+  .crumb
+    %ul.breadcrumb
+      %li= link_to(content_tag(:i, nil, class: 'icon16 i-home-4') + "首页", manage_root_path) + content_tag(:span, '/', class: 'divider')
+      %li
+        应用相关
+        = content_tag(:span, '/', class: 'divider')
+      %li.active SDK下载
+
+= content_for(:heading) do
+  #heading.page-header
+    %h1= content_tag(:i, nil, class: 'icon20 i-download-5') + ' SDK下载'
+
+.span12
+  .page-header
+    %h4 请选择合适您的SDK
+  .well.row-fluid
+    .span4
+      = link_to content_tag(:i, nil, class: 'icon32 i-android') + "版本：0.9.5 beta", '#', class: 'btn btn-info span10'
+    .span4
+      %ul.unstyled
+        %li= link_to content_tag(:i, nil, class: 'icon16 i-android') + "版本：0.9.5 beta（2013-9-12更新）", '#'
+        %li= content_tag(:i, nil, class: 'icon16 i-android') + "版本：0.8（2013-9-1更新）"
+
+  .well.row-fluid
+    .span4
+      = link_to content_tag(:i, nil, class: 'icon32 i-apple') + "版本：0.1 alpha", '#', class: 'btn btn-inverse disabled span10'
+    .span4
+      %ul.unstyled
+        %li= content_tag(:i, nil, class: 'icon16 i-apple') + "版本：0.1 alpha（2013-9-1更新）"
+

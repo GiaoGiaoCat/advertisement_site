@@ -1,0 +1,27 @@
+.widget
+  .widget-title
+    .icon
+      %i.icon20.i-stack-checkmark
+    %h4 帐号类型
+
+  .widget-content
+    = simple_form_for [:manage, @user], :html => { :class => 'form-horizontal' } do |f|
+      / # = f.error_notification
+      = f.input :email
+      = f.input :username
+      .control-group.radio_buttons.required.manage_application_platform
+        %label.radio_buttons.required.control-label
+          %abbr{ title: 'required' } *
+          帐号类型
+        .controls.controls-row
+          - User::ROLES.each do |role|
+            %label.radio.inline.span3
+              = f.radio_button("role", role)
+              = role
+
+      = f.input :password
+      = f.input :password_confirmation
+
+      .form-actions
+        = f.button :submit, "修改", :class => 'btn btn-primary'
+        = link_to '取消', manage_users_path, :class => 'btn'

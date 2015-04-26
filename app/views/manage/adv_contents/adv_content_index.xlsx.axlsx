@@ -1,0 +1,19 @@
+Axlsx::Package.new do |p|
+  wb = xlsx_package.workbook
+   wb.add_worksheet(name: "Sheet1") do |sheet|
+    sheet.add_row( ["ID", "广告", "日期", "安装完成", "cp激活", "效果安装比", "内部标签"])
+      @adv_contents.each do |ad_content|
+        (Date.parse(params[:begin])..Date.parse(params[:end])).each do |day|
+          day_s = day.to_s
+          statistics = ad_content.adv_statistics.between(day_s, day_s).sum(:install_count)
+          ap_activity = ad_content.cp_report_num(day_s, day_s)
+          platform_install_count = ad_content.platform_adv_statistics_sum(day_s, day_s)
+          statistics += platform_install_count unless platform_install_count.nil?
+          install_rate = (statistics == 0 ? 0 : (ap_activity / statistics).round(2))
+          arr = [ad_content.id, ad_content.title, day.to_s,  statistics, ap_activity, install_rate, ad_content.tag]
+          sheet.add_row arr
+        end
+      end
+    end
+  p.serialize('simple.xlsx')
+end
