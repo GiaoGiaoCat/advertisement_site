@@ -46,7 +46,7 @@
     %tbody
       - @applications.each do |app|
         %tr{class: draw_color_for_app(app)}
-          %td= app.name
+          %td= "#{app.name} (#{app.api_key})"
           %td.center
             = app.adv_contents_params[0]
           %td.center
